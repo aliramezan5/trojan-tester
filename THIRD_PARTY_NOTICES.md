@@ -3,10 +3,9 @@
 ## QRCode.js
 - Project: `davidshimjs/qrcodejs`
 - Pinned revision: `04f46c6a0708418cb7b96fc563eacae0fbf77674`
-- Vendored file: `vendor/qrcode.js`
-- Expected Git blob SHA: `993e88f396640f881b69f98db7a4d17401ef83ca`
+- Expected Git blob SHA for `qrcode.min.js`: `993e88f396640f881b69f98db7a4d17401ef83ca`
 - License: MIT
-- Purpose: local QR rendering. The browser loads the vendored file from the app's own origin; no runtime third-party QR request is made.
+- Purpose: local QR rendering. CI fetches the immutable pinned file at build time, verifies the expected Git blob SHA, and the browser then loads it from the app's own origin.
 
 ## cloudflared
 - Project: `cloudflare/cloudflared`
