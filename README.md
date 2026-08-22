@@ -33,17 +33,28 @@ npm run check
 ## Real Verify backend
 See [`backend/README.md`](backend/README.md). GitHub Pages cannot run `sing-box`, so public Real Verify requires a container host.
 
-### One-click Render deployment
-The repository includes [`render.yaml`](render.yaml) for a Docker web service in Frankfurt with `/health`, CORS restricted to the GitHub Pages origin, rate limits, private/reserved network blocking from the backend, and an automatically generated bearer token.
+### Railway deployment
+The repository includes [`railway.toml`](railway.toml). Railway builds `backend/Dockerfile`, checks `/health`, and restarts failed deployments automatically.
 
-Deploy from: `https://render.com/deploy?repo=https://github.com/aliramezan5/trojan-tester`
+Current Railway trial: up to 30 days with a one-time $5 credit for new accounts. For this project, use the **Full Trial** by connecting/verifying the Railway account with GitHub; the Limited Trial restricts outbound networking and can prevent proxy verification from working correctly.
 
-After Render finishes:
-1. Copy the service HTTPS URL into **Backend URL** in the app.
-2. Copy the generated `TT_API_TOKEN` from Render into **Backend Token**.
-3. Press **بررسی Backend**, then **Real Verify**.
+Deploy steps:
+1. Open `https://railway.com/new` and choose **Deploy from GitHub repo**.
+2. Select `aliramezan5/trojan-tester`.
+3. In the service **Variables** tab add:
+   - `TT_API_TOKEN=<a-long-random-secret>`
+   - `TT_ALLOWED_ORIGINS=https://aliramezan5.github.io`
+   - `TT_RATE_LIMIT=12`
+   - `TT_MAX_BATCH=20`
+   - `TT_VERIFY_CONCURRENCY=4`
+   - `TT_TRUST_PROXY=false`
+4. Railway injects `PORT` automatically; do not hard-code it.
+5. In **Settings → Region**, prefer **EU West / Amsterdam** for this deployment.
+6. In **Settings → Networking**, click **Generate Domain**.
+7. Put the generated `https://...up.railway.app` address into **Backend URL** in the app.
+8. Put the same `TT_API_TOKEN` into **Backend Token**, press **بررسی Backend**, then **Real Verify**.
 
-The free Render instance is suitable for testing but can spin down after inactivity. For always-on verification, switch the same service to a paid instance without changing the code.
+Once the GitHub repository is connected, pushes to the tracked branch can auto-deploy through Railway.
 
 ## Deployment
 `.github/workflows/pages.yml` runs tests, builds a static GitHub Pages artifact, fetches the pinned QR dependency, verifies its Git blob SHA, and deploys. This avoids a runtime dependency while keeping the build reproducible and checksum-gated.
