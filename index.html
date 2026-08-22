@@ -10,211 +10,26 @@
   <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="./icons/icon-192.png" />
   <link rel="stylesheet" href="./styles/app.css" />
+  <link rel="stylesheet" href="./styles/v11-extra.css" />
 </head>
 <body>
-  <header class="app-header">
-    <div class="header-content">
-      <div class="brand">
-        <div class="brand-icon" aria-hidden="true">⚡</div>
-        <div>
-          <h1>V2Ray & Trojan Tester</h1>
-          <p>Quick Scan در مرورگر + Real Verify اختیاری با sing-box</p>
-        </div>
-      </div>
-      <div class="status-badge" id="liveStatusBadge">
-        <span class="status-dot"></span>
-        <span id="liveStatusText">آماده</span>
-      </div>
-    </div>
-  </header>
-
+  <header class="app-header"><div class="header-content"><div class="brand"><div class="brand-icon">⚡</div><div><h1>V2Ray & Trojan Tester</h1><p>Quick Scan در مرورگر + Real Verify اختیاری با sing-box</p></div></div><div class="status-badge" id="liveStatusBadge"><span class="status-dot"></span><span id="liveStatusText">آماده</span></div></div></header>
   <main class="main-container">
-    <section class="notice notice-info" id="quickScanNotice">
-      <strong>Quick Scan تست واقعی پروکسی نیست.</strong>
-      <span>نتیجه Reachable فقط دسترس‌پذیری endpoint را نشان می‌دهد. تأیید واقعی فقط با Real Verify انجام می‌شود.</span>
+    <section class="notice notice-info"><strong>Quick Scan تست واقعی پروکسی نیست.</strong><span>Reachable فقط دسترس‌پذیری endpoint را نشان می‌دهد. تأیید واقعی فقط با Real Verify انجام می‌شود.</span></section>
+    <section class="panel"><div class="panel-head"><div><h2>منابع سابسکریپشن</h2><p id="activeSourcesCountBadge">۰ منبع فعال</p></div><button class="btn btn-ghost" id="addSourceButton">＋ افزودن لینک</button></div><div id="sourcesWrapper" class="sources-list"></div>
+      <div class="settings-grid"><label class="field"><span>Timeout</span><select id="timeoutConfigSelect"><option value="2000">۲ ثانیه</option><option value="3500" selected>۳.۵ ثانیه</option><option value="6000">۶ ثانیه</option><option value="10000">۱۰ ثانیه</option></select></label><label class="field"><span>Concurrency</span><select id="concurrencyConfigSelect"><option value="8">۸</option><option value="16" selected>۱۶</option><option value="24">۲۴</option></select></label><label class="field field-wide"><span>Backend URL برای Real Verify <small>(اختیاری)</small></span><input id="backendUrlInput" type="url" placeholder="https://tester-api.example.com" dir="ltr" /></label><label class="field"><span>Backend Token <small>(فقط همین Session)</small></span><input id="backendTokenInput" type="password" autocomplete="off" placeholder="اختیاری" dir="ltr" /></label><label class="toggle-field"><input id="persistSourcesToggle" type="checkbox" /><span>ذخیره لینک‌های سابسکریپشن روی همین دستگاه</span></label></div>
+      <div class="action-row"><button class="btn btn-primary" id="quickScanButton">⚡ Quick Scan</button><button class="btn btn-success" id="realTestButton">🔬 Real Verify</button><button class="btn btn-danger hidden" id="stopTestButton">⏹ توقف</button><button class="btn btn-ghost" id="checkBackendButton">بررسی Backend</button></div>
+      <div class="progress-section hidden" id="progressSection"><div class="progress-track"><div class="progress-fill" id="progressFillBar"></div></div><div class="progress-line"><span id="progressStatusLabel">آماده</span><span id="progressPercentLabel">0%</span></div><div class="metrics-row"><span>در حال اجرا: <b id="chipActiveConn">0</b></span><span>نرخ: <b id="chipSpeedRate">0</b> req/s</span><span>ETA: <b id="chipEtaTime">—</b></span></div></div>
     </section>
-
-    <section class="panel">
-      <div class="panel-head">
-        <div>
-          <h2>منابع سابسکریپشن</h2>
-          <p id="activeSourcesCountBadge">۰ منبع فعال</p>
-        </div>
-        <button class="btn btn-ghost" id="addSourceButton" type="button">＋ افزودن لینک</button>
-      </div>
-
-      <div id="sourcesWrapper" class="sources-list"></div>
-
-      <div class="settings-grid">
-        <label class="field">
-          <span>Timeout</span>
-          <select id="timeoutConfigSelect">
-            <option value="2000">۲ ثانیه</option>
-            <option value="3500" selected>۳.۵ ثانیه</option>
-            <option value="6000">۶ ثانیه</option>
-            <option value="10000">۱۰ ثانیه</option>
-          </select>
-        </label>
-
-        <label class="field">
-          <span>Concurrency</span>
-          <select id="concurrencyConfigSelect">
-            <option value="8">۸</option>
-            <option value="16" selected>۱۶</option>
-            <option value="24">۲۴</option>
-          </select>
-        </label>
-
-        <label class="field field-wide">
-          <span>Backend URL برای Real Verify <small>(اختیاری)</small></span>
-          <input id="backendUrlInput" type="url" inputmode="url" placeholder="https://tester-api.example.com" dir="ltr" />
-        </label>
-
-        <label class="field">
-          <span>Backend Token <small>(فقط همین Session)</small></span>
-          <input id="backendTokenInput" type="password" autocomplete="off" placeholder="اختیاری" dir="ltr" />
-        </label>
-
-        <label class="toggle-field">
-          <input id="persistSourcesToggle" type="checkbox" />
-          <span>ذخیره لینک‌های سابسکریپشن روی همین دستگاه</span>
-        </label>
-      </div>
-
-      <div class="action-row">
-        <button class="btn btn-primary" id="quickScanButton" type="button">⚡ Quick Scan</button>
-        <button class="btn btn-success" id="realTestButton" type="button">🔬 Real Verify</button>
-        <button class="btn btn-danger hidden" id="stopTestButton" type="button">⏹ توقف</button>
-        <button class="btn btn-ghost" id="checkBackendButton" type="button">بررسی Backend</button>
-      </div>
-
-      <div class="progress-section hidden" id="progressSection" aria-live="polite">
-        <div class="progress-track"><div class="progress-fill" id="progressFillBar"></div></div>
-        <div class="progress-line">
-          <span id="progressStatusLabel">آماده</span>
-          <span id="progressPercentLabel">0%</span>
-        </div>
-        <div class="metrics-row">
-          <span>در حال اجرا: <b id="chipActiveConn">0</b></span>
-          <span>نرخ: <b id="chipSpeedRate">0</b> req/s</span>
-          <span>ETA: <b id="chipEtaTime">—</b></span>
-        </div>
-      </div>
-    </section>
-
-    <section class="stats-grid" aria-label="آمار تست">
-      <article class="stat"><strong id="statTotalCount">0</strong><span>کل کانفیگ‌ها</span></article>
-      <article class="stat stat-verified"><strong id="statVerifiedCount">0</strong><span>Verified</span></article>
-      <article class="stat stat-reachable"><strong id="statReachableCount">0</strong><span>Reachable</span></article>
-      <article class="stat stat-uncertain"><strong id="statUncertainCount">0</strong><span>Uncertain</span></article>
-      <article class="stat stat-dead"><strong id="statDeadCount">0</strong><span>Failed</span></article>
-      <article class="stat"><strong id="statBestLatency">—</strong><span>بهترین Probe</span></article>
-    </section>
-
-    <section class="panel export-panel hidden" id="exportCardSection">
-      <div class="panel-head compact">
-        <div>
-          <h2>خروجی</h2>
-          <p id="exportCountBadge">۰ کانفیگ</p>
-        </div>
-        <label class="field inline-field">
-          <span>خروجی</span>
-          <select id="exportModeSelect">
-            <option value="verified">فقط Verified</option>
-            <option value="usable">Verified + Reachable</option>
-            <option value="selected">انتخاب‌شده‌ها</option>
-          </select>
-        </label>
-      </div>
-      <textarea id="exportTextarea" class="export-textarea" readonly dir="ltr"></textarea>
-      <div class="share-grid">
-        <button class="share-btn" id="copyExportButton" type="button">📋 کپی</button>
-        <button class="share-btn" id="downloadExportButton" type="button">⬇️ TXT</button>
-        <button class="share-btn" id="qrExportButton" type="button">▦ QR</button>
-        <button class="share-btn" id="base64ExportButton" type="button">🔗 Base64</button>
-        <button class="share-btn" id="webShareButton" type="button">📤 Share</button>
-      </div>
-      <p class="privacy-note">Base64 رمزنگاری نیست. لینک یا خروجی کانفیگ را عمومی منتشر نکنید.</p>
-    </section>
-
-    <section class="filter-section">
-      <div class="filter-row">
-        <input id="searchFilterInput" type="search" placeholder="جستجو در IP، SNI، نام، پروتکل…" />
-        <select id="sortOrderSelect">
-          <option value="latency_asc">کمترین latency</option>
-          <option value="status">بر اساس وضعیت</option>
-          <option value="protocol">بر اساس پروتکل</option>
-          <option value="address">بر اساس آدرس</option>
-        </select>
-      </div>
-      <div class="pills" id="filterPills">
-        <button class="pill active" data-filter="all" type="button">همه</button>
-        <button class="pill" data-filter="verified" type="button">✅ Verified</button>
-        <button class="pill" data-filter="reachable" type="button">🟢 Reachable</button>
-        <button class="pill" data-filter="uncertain" type="button">🟡 Uncertain</button>
-        <button class="pill" data-filter="failed" type="button">🔴 Failed</button>
-        <button class="pill" data-filter="vless" type="button">VLESS</button>
-        <button class="pill" data-filter="trojan" type="button">Trojan</button>
-        <button class="pill" data-filter="vmess" type="button">VMess</button>
-        <button class="pill" data-filter="hysteria2" type="button">Hysteria2</button>
-        <button class="pill" data-filter="ss" type="button">SS</button>
-      </div>
-    </section>
-
-    <section id="serversListContainer" class="servers-list">
-      <div class="empty-state">
-        <div>🚀</div>
-        <p>برای شروع Quick Scan یا Real Verify را بزنید.</p>
-      </div>
-    </section>
+    <section class="stats-grid"><article class="stat"><strong id="statTotalCount">0</strong><span>کل کانفیگ‌ها</span></article><article class="stat stat-verified"><strong id="statVerifiedCount">0</strong><span>Verified</span></article><article class="stat stat-reachable"><strong id="statReachableCount">0</strong><span>Reachable</span></article><article class="stat stat-uncertain"><strong id="statUncertainCount">0</strong><span>Uncertain</span></article><article class="stat stat-dead"><strong id="statDeadCount">0</strong><span>Failed</span></article><article class="stat"><strong id="statBestLatency">—</strong><span>بهترین Probe</span></article></section>
+    <section class="panel export-panel hidden" id="exportCardSection"><div class="panel-head compact"><div><h2>خروجی</h2><p id="exportCountBadge">۰ کانفیگ</p></div><label class="field inline-field"><span>خروجی</span><select id="exportModeSelect"><option value="verified">فقط Verified</option><option value="usable">Verified + Reachable</option><option value="selected">انتخاب‌شده‌ها</option></select></label></div><textarea id="exportTextarea" class="export-textarea" readonly dir="ltr"></textarea><div class="share-grid"><button class="share-btn" id="copyExportButton">📋 کپی</button><button class="share-btn" id="downloadExportButton">⬇️ TXT</button><button class="share-btn" id="qrExportButton">▦ QR</button><button class="share-btn" id="base64ExportButton">🔗 Base64</button><button class="share-btn" id="webShareButton">📤 Share</button></div><p class="privacy-note">Base64 رمزنگاری نیست. لینک یا خروجی کانفیگ را عمومی منتشر نکنید.</p></section>
+    <section class="filter-section"><div class="filter-row"><input id="searchFilterInput" type="search" placeholder="جستجو در IP، SNI، نام، پروتکل…" /><select id="sortOrderSelect"><option value="latency_asc">کمترین latency</option><option value="status">بر اساس وضعیت</option><option value="protocol">بر اساس پروتکل</option><option value="address">بر اساس آدرس</option></select></div><div class="pills" id="filterPills"><button class="pill active" data-filter="all">همه</button><button class="pill" data-filter="verified">✅ Verified</button><button class="pill" data-filter="reachable">🟢 Reachable</button><button class="pill" data-filter="uncertain">🟡 Uncertain</button><button class="pill" data-filter="failed">🔴 Failed</button><button class="pill" data-filter="vless">VLESS</button><button class="pill" data-filter="trojan">Trojan</button><button class="pill" data-filter="vmess">VMess</button><button class="pill" data-filter="hysteria2">Hysteria2</button><button class="pill" data-filter="ss">SS</button></div></section>
+    <section id="serversListContainer" class="servers-list"><div class="empty-state"><div>🚀</div><p>برای شروع Quick Scan یا Real Verify را بزنید.</p></div></section>
+    <section class="panel history-panel"><div class="panel-head compact"><div><h2>تاریخچه تست</h2><p>آخرین اجراها فقط روی همین دستگاه نگهداری می‌شوند.</p></div><button class="btn btn-ghost" id="refreshHistoryButton">بروزرسانی</button></div><div id="historyList" class="history-list"><div class="empty-inline">هنوز تستی ثبت نشده است.</div></div></section>
   </main>
-
-  <aside class="selection-bar hidden" id="selectionToolbar">
-    <strong id="selectedCountText">۰ انتخاب</strong>
-    <div>
-      <button id="selectVisibleButton" type="button">همه نمایش‌داده‌شده</button>
-      <button id="selectUsableButton" type="button">Verified/Reachable</button>
-      <button id="clearSelectionButton" type="button">لغو</button>
-      <button id="copySelectedButton" type="button">کپی</button>
-      <button id="qrSelectedButton" type="button">QR</button>
-    </div>
-  </aside>
-
-  <div class="modal-backdrop" id="qrModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="qrModalTitle">
-    <div class="modal-window">
-      <div class="modal-head">
-        <h3 id="qrModalTitle">QR محلی</h3>
-        <button class="modal-close" data-close-modal="qrModalBackdrop" type="button">✕</button>
-      </div>
-      <div id="qrLocalStatus" class="notice notice-muted">QR فقط روی دستگاه شما تولید می‌شود و کانفیگ به سرویس ثالث ارسال نمی‌شود.</div>
-      <div id="qrRenderTarget" class="qr-target"></div>
-      <div id="qrCarouselNav" class="qr-nav"></div>
-      <pre id="qrRawText" class="code-box" dir="ltr"></pre>
-      <div class="action-row">
-        <button class="btn btn-primary" id="copyQrConfigButton" type="button">کپی کانفیگ</button>
-        <button class="btn btn-ghost" id="downloadQrButton" type="button">دانلود QR</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="base64ModalBackdrop" role="dialog" aria-modal="true">
-    <div class="modal-window">
-      <div class="modal-head">
-        <h3>Base64 Subscription</h3>
-        <button class="modal-close" data-close-modal="base64ModalBackdrop" type="button">✕</button>
-      </div>
-      <div class="notice notice-warning">این متن رمزگذاری نشده است و هر شخصی که آن را داشته باشد می‌تواند کانفیگ‌ها را بخواند.</div>
-      <pre id="base64Output" class="code-box" dir="ltr"></pre>
-      <button class="btn btn-primary" id="copyBase64Button" type="button">کپی</button>
-    </div>
-  </div>
-
-  <div class="toast" id="toastMessage" role="status" aria-live="polite">
-    <span id="toastIcon">✓</span>
-    <span id="toastText"></span>
-  </div>
-
-  <script src="./vendor/qrcode.js" defer onerror="window.__QR_VENDOR_MISSING__=true"></script>
-  <script type="module" src="./src/main.js"></script>
-</body>
-</html>
+  <aside class="selection-bar hidden" id="selectionToolbar"><strong id="selectedCountText">۰ انتخاب</strong><div><button id="selectVisibleButton">همه نمایش‌داده‌شده</button><button id="selectUsableButton">Verified/Reachable</button><button id="clearSelectionButton">لغو</button><button id="copySelectedButton">کپی</button><button id="qrSelectedButton">QR</button></div></aside>
+  <div class="modal-backdrop" id="qrModalBackdrop" role="dialog" aria-modal="true"><div class="modal-window"><div class="modal-head"><h3 id="qrModalTitle">QR محلی</h3><button class="modal-close" data-close-modal="qrModalBackdrop">✕</button></div><div id="qrLocalStatus" class="notice notice-muted">QR فقط روی دستگاه شما تولید می‌شود و کانفیگ به سرویس ثالث ارسال نمی‌شود.</div><div id="qrRenderTarget" class="qr-target"></div><div id="qrCarouselNav" class="qr-nav"></div><pre id="qrRawText" class="code-box" dir="ltr"></pre><div class="action-row"><button class="btn btn-primary" id="copyQrConfigButton">کپی کانفیگ</button><button class="btn btn-ghost" id="downloadQrButton">دانلود QR</button></div></div></div>
+  <div class="modal-backdrop" id="base64ModalBackdrop" role="dialog" aria-modal="true"><div class="modal-window"><div class="modal-head"><h3>Base64 Subscription</h3><button class="modal-close" data-close-modal="base64ModalBackdrop">✕</button></div><div class="notice notice-warning">این متن رمزگذاری نشده است و هر شخصی که آن را داشته باشد می‌تواند کانفیگ‌ها را بخواند.</div><pre id="base64Output" class="code-box" dir="ltr"></pre><button class="btn btn-primary" id="copyBase64Button">کپی</button></div></div>
+  <div class="toast" id="toastMessage" role="status"><span id="toastIcon">✓</span><span id="toastText"></span></div>
+  <script src="./vendor/qrcode.js" defer onerror="window.__QR_VENDOR_MISSING__=true"></script><script type="module" src="./src/main.js"></script>
+</body></html>

@@ -1,22 +1,17 @@
 import { browserProbeCapability } from './parser.js';
 
-function abortableTimeout(ms, controller) {
-  const timer = setTimeout(() => controller.abort(new DOMException('Timeout', 'AbortError')), ms);
-  return () => clearTimeout(timer);
-}
-
 function formatHost(host) {
   return host.includes(':') && !host.startsWith('[') ? `[${host}]` : host;
 }
 
-function tlsPortSuffix(port) {
+function portSuffix(port) {
   return Number(port) === 443 ? '' : `:${Number(port)}`;
 }
 
 function wsProbe(cfg, timeoutMs, parentSignal) {
   return new Promise(resolve => {
     const path = cfg.path?.startsWith('/') ? cfg.path : `/${cfg.path || ''}`;
-    const url = `wss://${formatHost(cfg.address)}${tlsPortSuffix(cfg.port)}${path || '/'}`;
+    const url = `wss://${formatHost(cfg.address)}${portSuffix(cfg.port)}${path || '/'}`;
     const started = performance.now();
     let settled = false;
     let opened = false;
@@ -51,12 +46,12 @@ function wsProbe(cfg, timeoutMs, parentSignal) {
 
 async function httpsProbe(cfg, timeoutMs, parentSignal) {
   const controller = new AbortController();
-  const clean = abortableTimeout(timeoutMs, controller);
-  const onAbort = () => controller.abort(parentSignal.reason || new DOMException('Aborted', 'AbortError'));
+  const timeout = setTimeout(() => controller.abort(new DOMException('Timeout', 'AbortError')), timeoutMs);
+  const onAbort = () => controller.abort(parentSignal?.reason || new DOMException('Aborted', 'AbortError'));
   parentSignal?.addEventListener('abort', onAbort, { once: true });
   const started = performance.now();
   try {
-    const url = `https://${formatHost(cfg.address)}${tlsPortSuffix(cfg.port)}/?_tt=${Date.now()}`;
+    const url = `https://${formatHost(cfg.address)}${portSuffix(cfg.port)}/?_tt=${Date.now()}`;
     await fetch(url, {
       method: 'HEAD',
       mode: 'no-cors',
@@ -71,19 +66,17 @@ async function httpsProbe(cfg, timeoutMs, parentSignal) {
     if (controller.signal.aborted) return { ok: false, reason: 'HTTPS timeout' };
     return { ok: false, reason: error?.message || 'HTTPS network error' };
   } finally {
-    clean();
+    clearTimeout(timeout);
     parentSignal?.removeEventListener('abort', onAbort);
   }
 }
 
 async function firstValidSuccess(probes) {
   if (!probes.length) return { ok: false, reason: 'No valid browser probe' };
-  const contenders = probes.map(promise =>
-    Promise.resolve(promise).then(result => {
-      if (result?.ok) return result;
-      throw result || { ok: false, reason: 'Probe failed' };
-    })
-  );
+  const contenders = probes.map(promise => Promise.resolve(promise).then(result => {
+    if (result?.ok) return result;
+    throw result || { ok: false, reason: 'Probe failed' };
+  }));
   try {
     return await Promise.any(contenders);
   } catch (aggregate) {
@@ -97,39 +90,24 @@ export async function quickProbe(cfg, timeoutMs, signal) {
   const capability = browserProbeCapability(cfg);
   if (!capability.testable) {
     return {
-      status: 'uncertain',
-      latency: null,
-      reason: capability.reason,
-      probeType: 'browser-limited',
-      testedAt: Date.now(),
-      score: null
+      status: 'uncertain', latency: null, reason: capability.reason,
+      probeType: 'browser-limited', testedAt: Date.now(), score: null
     };
   }
-
   const probes = [];
   if (cfg.transport === 'ws') probes.push(wsProbe(cfg, timeoutMs, signal));
   probes.push(httpsProbe(cfg, timeoutMs, signal));
-
   const result = await firstValidSuccess(probes);
   if (result.ok) {
     return {
-      status: 'reachable',
-      latency: result.latency,
+      status: 'reachable', latency: result.latency,
       reason: 'Endpoint پاسخ داد؛ اتصال واقعی پروکسی هنوز تأیید نشده است',
-      probeType: result.probeType,
-      testedAt: Date.now(),
-      score: null
+      probeType: result.probeType, testedAt: Date.now(), score: null
     };
   }
-  if (result.aborted) {
-    return { status: 'pending', latency: null, reason: 'Aborted', probeType: '', testedAt: Date.now(), score: null };
-  }
+  if (result.aborted) return { status: 'pending', latency: null, reason: 'Aborted', probeType: '', testedAt: Date.now(), score: null };
   return {
-    status: 'failed',
-    latency: null,
-    reason: result.reason || 'Valid browser probes failed',
-    probeType: cfg.transport === 'ws' ? 'websocket/https' : 'https',
-    testedAt: Date.now(),
-    score: null
+    status: 'failed', latency: null, reason: result.reason || 'Valid browser probes failed',
+    probeType: cfg.transport === 'ws' ? 'websocket/https' : 'https', testedAt: Date.now(), score: null
   };
 }
