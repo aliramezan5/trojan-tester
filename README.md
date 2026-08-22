@@ -31,7 +31,19 @@ npm run check
 - `start-backend.bat` runs the optional Real Verify backend if Node.js and `sing-box` are installed.
 
 ## Real Verify backend
-See [`backend/README.md`](backend/README.md). GitHub Pages cannot run `sing-box`, so public Real Verify requires a VPS/container host and a configured HTTPS backend URL/token.
+See [`backend/README.md`](backend/README.md). GitHub Pages cannot run `sing-box`, so public Real Verify requires a container host.
+
+### One-click Render deployment
+The repository includes [`render.yaml`](render.yaml) for a Docker web service in Frankfurt with `/health`, CORS restricted to the GitHub Pages origin, rate limits, private/reserved network blocking from the backend, and an automatically generated bearer token.
+
+Deploy from: `https://render.com/deploy?repo=https://github.com/aliramezan5/trojan-tester`
+
+After Render finishes:
+1. Copy the service HTTPS URL into **Backend URL** in the app.
+2. Copy the generated `TT_API_TOKEN` from Render into **Backend Token**.
+3. Press **بررسی Backend**, then **Real Verify**.
+
+The free Render instance is suitable for testing but can spin down after inactivity. For always-on verification, switch the same service to a paid instance without changing the code.
 
 ## Deployment
 `.github/workflows/pages.yml` runs tests, builds a static GitHub Pages artifact, fetches the pinned QR dependency, verifies its Git blob SHA, and deploys. This avoids a runtime dependency while keeping the build reproducible and checksum-gated.
