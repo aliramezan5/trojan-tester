@@ -1,0 +1,15 @@
+services:
+  tester-api:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    environment:
+      TT_API_TOKEN: "change-this-long-random-token"
+      TT_ALLOWED_ORIGINS: "https://aliramezan5.github.io"
+      TT_RATE_LIMIT: "12"
+      TT_MAX_BATCH: "20"
+      TT_VERIFY_CONCURRENCY: "4"
+      TT_TRUST_PROXY: "false"
+    ports:
+      - "127.0.0.1:8787:8787"

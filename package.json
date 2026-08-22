@@ -1,0 +1,11 @@
+{
+  "name":"trojan-tester",
+  "version":"1.1.0",
+  "private":true,
+  "type":"module",
+  "engines":{"node":">=20"},
+  "scripts":{
+    "test":"node --test tests/*.test.mjs",
+    "check":"node --check src/main.js && node --check src/parser.js && node --check src/quick-tester.js && node --check src/scheduler.js && node --check src/storage.js && node --check backend/server.mjs && node --check backend/lib/parser.mjs && node --check backend/lib/security.mjs && node --check backend/lib/subscription.mjs && node --check backend/lib/singbox.mjs && node --check backend/lib/socks-probe.mjs"
+  }
+}

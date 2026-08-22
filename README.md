@@ -1,27 +1,40 @@
-# ⚡ Trojan Fast Tester
+# ⚡ V2Ray & Trojan Tester v1.1
 
-## 🚀 روش‌های اجرا
+A privacy-hardened proxy tester with two distinct modes:
 
-### ۱. اجرای خودکار همه‌چیز (پیشنهادی)
-فقط کافیست روی **start-all.bat** دوبار کلیک کنید:
-- سرور محلی پایتون را اجرا می‌کند.
-- تونل عمومی Cloudflare را فعال می‌کند و یک لینک اینترنتی عمومی مانند https://xxxx.trycloudflare.com به شما می‌دهد.
-- مرورگر را خودکار باز می‌کند.
+- **Quick Scan (browser):** conservative endpoint reachability only. It does **not** claim a proxy is working.
+- **Real Verify (optional backend):** actual proxy traffic through `sing-box`, with repeated attempts and a score.
 
-### ۲. دسترسی از طریق موبایل (همان وای‌فای)
-- فایل start-server.bat یا start-all.bat را اجرا کنید.
-- آدرس نمایش داده شده (مثلاً http://192.168.1.50:8080) را در مرورگر موبایل خود وارد کنید.
+Live frontend: `https://aliramezan5.github.io/trojan-tester/`
 
-### ۳. دسترسی از خارج از شبکه / اینترنت همراه (بدون محدودیت)
-- با اجرای start-all.bat، لینک داده شده از 	rycloudflare.com را روی هر موبایلی در هر نقطه‌ای از دنیا باز کنید.
+## v1.1 changes
+- Removed fast-error false positives and the old SNI-as-endpoint assumption.
+- Quick Scan reports **Reachable / Uncertain / Failed**; only backend verification can report **Verified**.
+- Structured parsing for VLESS, Trojan, VMess, Hysteria2, Shadowsocks and TUIC.
+- Structural SHA-256 fingerprints for dedup/cache; secrets are excluded from the cache key.
+- Source persistence is opt-in; backend token is session-only.
+- No public CORS proxy fallback. The optional backend has an SSRF-hardened subscription proxy.
+- QR is generated locally from a vendored, pinned QRCode.js file; no runtime third-party QR request is made.
+- IndexedDB cache/history, corrected Select Visible behavior, PWA support, iPhone-focused responsive UI.
+- Optional `sing-box` Real Verify backend with rate limits, private/reserved network blocking, fixed test destinations, repeated attempts, exit IP and a small throughput probe.
 
-### ۴. میزبانی رایگان و دائمی (بدون نیاز به روشن بودن کامپیوتر)
-- فایل index.html کاملاً مستقل (Single-File) است.
-- می‌توانید آن را در سرویس‌های رایگانی مثل **GitHub Pages**، **Netlify**، یا **Vercel** قرار دهید تا یک لینک دائمی داشته باشید.
+## Development
+Requires Node.js 20+ for tests/checks; the frontend itself is static.
+```bash
+npm test
+npm run check
+```
 
----
-## ✨ امکانات
-- **الگوریتم موازی هوشمند (AIMD + Multi-Probe + Two-Phase)**
-- **پشتیبانی از چندین لینک Subscription همزمان**
-- **سیستم انتخاب گروهی سرورها (Selection Toolbar)**
-- **۷ متد متنوع اشتراک‌گذاری (QR Code تکی و گروهی، Base64، لینک URL، تلگرام، دانلود .txt)**
+## Local Windows usage
+- `start-server.bat` verifies the pinned local QR vendor and starts the frontend.
+- `start-all.bat` starts the frontend plus the pinned/verified Cloudflare Quick Tunnel.
+- `start-backend.bat` runs the optional Real Verify backend if Node.js and `sing-box` are installed.
+
+## Real Verify backend
+See [`backend/README.md`](backend/README.md). GitHub Pages cannot run `sing-box`, so public Real Verify requires a VPS/container host and a configured HTTPS backend URL/token.
+
+## Deployment
+`.github/workflows/pages.yml` runs tests, verifies the vendored QR dependency by Git blob SHA, builds the static GitHub Pages artifact, and deploys it without downloading runtime dependencies.
+
+## Third-party software
+See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
