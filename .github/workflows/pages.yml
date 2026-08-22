@@ -22,13 +22,13 @@ jobs:
         with:
           node-version: '22'
       - run: npm test && npm run check
-      - name: Verify vendored QR dependency
-        run: test "$(git hash-object vendor/qrcode.js)" = '993e88f396640f881b69f98db7a4d17401ef83ca'
       - name: Build static artifact
         run: |
-          mkdir -p _site
+          mkdir -p _site/vendor
           cp index.html manifest.webmanifest service-worker.js _site/
-          cp -R styles src icons vendor _site/
+          cp -R styles src icons _site/
+          curl -fsSL 'https://raw.githubusercontent.com/davidshimjs/qrcodejs/04f46c6a0708418cb7b96fc563eacae0fbf77674/qrcode.min.js' -o _site/vendor/qrcode.js
+          test "$(git hash-object _site/vendor/qrcode.js)" = '993e88f396640f881b69f98db7a4d17401ef83ca'
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
