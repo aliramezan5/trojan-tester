@@ -1,0 +1,39 @@
+name: Sync pinned QR vendor
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify-and-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch immutable QRCode.js revision
+        run: |
+          curl -fsSL 'https://raw.githubusercontent.com/davidshimjs/qrcodejs/04f46c6a0708418cb7b96fc563eacae0fbf77674/qrcode.min.js' -o /tmp/qrcode.js
+      - name: Verify exact Git blob identity
+        run: |
+          test "$(git hash-object /tmp/qrcode.js)" = '993e88f396640f881b69f98db7a4d17401ef83ca'
+      - name: Sync verified vendor to main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p vendor
+          cp /tmp/qrcode.js vendor/qrcode.js
+          git add vendor/qrcode.js
+          if git diff --cached --quiet; then
+            echo 'Pinned vendor is already exact; nothing to commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'chore(vendor): sync verified pinned QRCode.js [skip ci]'
+          git push origin HEAD:main
