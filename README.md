@@ -6,6 +6,7 @@ A privacy-hardened proxy tester with two distinct modes:
 - **Real Verify (optional backend):** actual proxy traffic through `sing-box`, with repeated attempts and a score.
 
 Live frontend: `https://aliramezan5.github.io/trojan-tester/`
+Live Railway backend: `https://trojan-tester-production.up.railway.app`
 
 ## v1.1 changes
 - Removed fast-error false positives and the old SNI-as-endpoint assumption.
@@ -50,9 +51,11 @@ Deploy steps:
    - `TT_TRUST_PROXY=false`
 4. Railway injects `PORT` automatically; do not hard-code it.
 5. In **Settings → Region**, prefer **EU West / Amsterdam** for this deployment.
-6. In **Settings → Networking**, click **Generate Domain**.
-7. Put the generated `https://...up.railway.app` address into **Backend URL** in the app.
+6. In **Settings → Networking**, generate or keep the public domain.
+7. Current backend URL: `https://trojan-tester-production.up.railway.app`
 8. Put the same `TT_API_TOKEN` into **Backend Token**, press **بررسی Backend**, then **Real Verify**.
+
+When running on Railway, the backend reads Railway's trusted `X-Real-IP` header for per-client rate limiting. `TT_TRUST_PROXY` can therefore remain `false` unless the service is later placed behind another controlled proxy.
 
 Once the GitHub repository is connected, pushes to the tracked branch can auto-deploy through Railway.
 
