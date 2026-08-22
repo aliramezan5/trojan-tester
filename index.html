@@ -2,1094 +2,2184 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>⚡ Trojan Fast Tester</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <title>⚡ V2Ray & Trojan Speed Tester — Pro Edition</title>
+  
+  <!-- Google Fonts: Vazirmatn & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --bg:#0d1117;--card:#161b22;--border:#30363d;
-      --accent:#58a6ff;--green:#3fb950;--yellow:#d29922;
-      --red:#f85149;--purple:#bc8cff;--orange:#f0883e;
-      --text:#e6edf3;--muted:#8b949e;
-      --radius:12px;--shadow:0 4px 24px rgba(0,0,0,.55);
+    /* ══════════════════════════════════════════════════════════════
+       🎨 MODERN GLASSMORPHISM DESIGN SYSTEM & THEME
+       ══════════════════════════════════════════════════════════════ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
-    body{font-family:'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:80px}
 
-    header{background:linear-gradient(135deg,#1a1f2e,#0d1117);border-bottom:1px solid var(--border);padding:16px 20px;text-align:center;position:sticky;top:0;z-index:200}
-    header h1{font-size:1.55rem;font-weight:700;background:linear-gradient(90deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    header p{color:var(--muted);font-size:.78rem;margin-top:2px}
+    :root {
+      --bg-dark: #090d16;
+      --bg-surface: #0f172a;
+      --card-bg: rgba(21, 29, 46, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(30, 41, 69, 0.85);
 
-    .container{max-width:1100px;margin:0 auto;padding:16px 14px}
+      --primary: #38bdf8;
+      --primary-glow: rgba(56, 189, 248, 0.25);
+      --purple: #a855f7;
+      --purple-glow: rgba(168, 85, 247, 0.25);
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.25);
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --indigo: #6366f1;
 
-    .panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px;box-shadow:var(--shadow)}
-    .panel-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px}
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
 
-    /* ─ Source rows ─ */
-    .source-row{display:flex;gap:8px;align-items:center;margin-bottom:7px}
-    .url-input{flex:1;min-width:180px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 11px;font-size:.84rem;outline:none;direction:ltr;transition:border-color .2s}
-    .url-input:focus{border-color:var(--accent)}
-    .src-remove{padding:7px 11px;border-radius:7px;border:1px solid var(--red)44;background:transparent;color:var(--red);cursor:pointer;font-size:.82rem;transition:all .15s;white-space:nowrap;flex-shrink:0}
-    .src-remove:hover{background:var(--red)22}
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
 
-    /* ─ Controls ─ */
-    .ctrl-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
-    .sel{background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:7px 11px;font-size:.8rem;outline:none;cursor:pointer}
-
-    .btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:.84rem;font-weight:600;transition:opacity .2s,transform .1s;white-space:nowrap}
-    .btn:active{transform:scale(.97)}
-    .btn:disabled{opacity:.4;cursor:not-allowed}
-    .btn-primary{background:var(--accent);color:#000}
-    .btn-green  {background:var(--green); color:#000}
-    .btn-danger {background:var(--red);   color:#fff}
-    .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
-    .btn-outline:hover{border-color:var(--accent);color:var(--accent)}
-    .btn-sm{padding:5px 11px;font-size:.76rem}
-
-    /* ─ Chips ─ */
-    .algo-bar{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
-    .chip{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:999px;font-size:.68rem;font-weight:700;border:1px solid}
-    .chip-b{color:var(--accent);border-color:var(--accent)44;background:var(--accent)0f}
-    .chip-p{color:var(--purple);border-color:var(--purple)44;background:var(--purple)0f}
-    .chip-g{color:var(--green); border-color:var(--green)44; background:var(--green)0f}
-    .chip-y{color:var(--yellow);border-color:var(--yellow)44;background:var(--yellow)0f}
-    .chip val{font-size:.8rem;font-weight:800}
-
-    /* ─ Phase ─ */
-    .phase-bar{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;padding:9px;background:var(--bg);border-radius:8px;border:1px solid var(--border)}
-    .phase-item{flex:1;min-width:90px;padding:5px 9px;border-radius:6px;border:1px solid var(--border);font-size:.7rem;text-align:center;color:var(--muted)}
-    .phase-item.active{border-color:var(--accent);color:var(--accent);background:var(--accent)11}
-    .phase-item.done  {border-color:var(--green); color:var(--green); background:var(--green)11}
-
-    /* ─ Progress ─ */
-    .prog-wrap{background:var(--bg);border-radius:999px;height:7px;overflow:hidden;margin:10px 0 4px}
-    .prog-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--purple));border-radius:999px;transition:width .15s}
-    .prog-meta{display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted)}
-
-    /* ─ Stats ─ */
-    .stats-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
-    .stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 13px;flex:1;min-width:90px;text-align:center}
-    .stat-card .num{font-size:1.4rem;font-weight:700;line-height:1}
-    .stat-card .lbl{font-size:.65rem;color:var(--muted);margin-top:3px}
-
-    /* ─ Selection toolbar ─ */
-    .sel-bar{
-      position:sticky;top:62px;z-index:90;
-      background:var(--accent)ee;backdrop-filter:blur(10px);
-      border-radius:var(--radius);padding:9px 14px;
-      display:none;align-items:center;flex-wrap:wrap;gap:7px;
-      margin-bottom:12px;box-shadow:0 4px 20px rgba(88,166,255,.35);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.45);
+      --shadow-glow: 0 0 25px var(--primary-glow);
     }
-    .sel-bar.visible{display:flex}
-    .sel-count{font-weight:800;color:#000;font-size:.86rem;margin-left:4px}
-    .btn-sel{padding:5px 11px;border-radius:6px;border:1px solid rgba(0,0,0,.2);background:rgba(0,0,0,.12);color:#000;cursor:pointer;font-size:.75rem;font-weight:600;transition:background .15s;white-space:nowrap}
-    .btn-sel:hover{background:rgba(0,0,0,.22)}
-    .sel-div{width:1px;height:18px;background:rgba(0,0,0,.2);margin:0 2px;flex-shrink:0}
 
-    /* ─ Filter ─ */
-    .filter-row{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:11px}
-    .search-box{background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:7px 11px;font-size:.82rem;outline:none;min-width:170px;flex:1;direction:ltr}
-    .search-box:focus{border-color:var(--accent)}
-    .badge-f{display:inline-flex;align-items:center;gap:3px;padding:4px 10px;border-radius:999px;font-size:.72rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .17s}
-    .badge-f.fa{background:var(--accent);color:#000;border-color:var(--accent)}
-    .badge-f.fo{background:var(--green); color:#000;border-color:var(--green)}
-    .badge-f.fs{background:var(--yellow);color:#000;border-color:var(--yellow)}
-    .badge-f.fd{background:var(--red);   color:#fff;border-color:var(--red)}
+    body {
+      font-family: 'Vazirmatn', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.08) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      line-height: 1.5;
+      padding-bottom: 120px;
+    }
 
-    /* ─ Server Cards ─ */
-    #serverGrid{display:flex;flex-direction:column;gap:7px}
-    .server-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:10px;transition:border-color .22s,background .22s}
-    .server-card:hover{border-color:var(--accent)66}
-    .server-card.selected{border-color:var(--accent)!important;background:var(--accent)0d}
-    .sc-gold  {border-color:#ffd700;box-shadow:0 0 10px #ffd70018}
-    .sc-silver{border-color:#c0c0c0}
-    .sc-bronze{border-color:#cd7f32}
+    /* ─── Header & Top App Bar ───────────────────────────────── */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(9, 13, 22, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 14px 20px;
+      transition: all 0.3s ease;
+    }
 
-    /* Checkbox wrapper */
-    .cb-wrap{width:20px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-    .server-cb{width:15px;height:15px;accent-color:var(--accent);cursor:pointer}
+    .header-content {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
 
-    .rank-badge{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0}
-    .rb1{background:#ffd70020;color:#ffd700;border:1px solid #ffd70055}
-    .rb2{background:#c0c0c020;color:#c0c0c0;border:1px solid #c0c0c055}
-    .rb3{background:#cd7f3220;color:#cd7f32;border:1px solid #cd7f3255}
-    .rbn{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-    .server-info{flex:1;min-width:0}
-    .server-name{font-size:.84rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:ltr}
-    .server-meta{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
-    .tag{display:inline-flex;align-items:center;gap:2px;font-size:.64rem;padding:1px 6px;border-radius:999px;background:var(--bg);border:1px solid var(--border);color:var(--muted);direction:ltr}
-    .tag.tg{border-color:var(--green)55; color:var(--green)}
-    .tag.ty{border-color:var(--yellow)55;color:var(--yellow)}
-    .tag.tr{border-color:var(--red)55;   color:var(--red)}
-    .tag.tb{border-color:var(--accent)55;color:var(--accent)}
-    .tag.tp{border-color:var(--purple)55;color:var(--purple)}
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 4px 15px var(--primary-glow);
+      position: relative;
+    }
 
-    .lat-block{text-align:center;min-width:56px;flex-shrink:0}
-    .lat-val{font-size:1.1rem;font-weight:800;line-height:1}
-    .lat-unit{font-size:.6rem;color:var(--muted)}
-    .spin{width:17px;height:17px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .55s linear infinite;margin:0 auto}
-    @keyframes spin{to{transform:rotate(360deg)}}
+    .logo-text h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #38bdf8, #c084fc, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+    }
 
-    .card-acts{display:flex;flex-direction:column;gap:4px;flex-shrink:0}
-    .icon-btn{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.82rem;transition:all .16s}
-    .icon-btn:hover      {border-color:var(--accent);color:var(--accent)}
-    .icon-btn.copied     {border-color:var(--green); color:var(--green)}
-    .icon-btn.share-btn:hover{border-color:var(--purple);color:var(--purple)}
+    .logo-text p {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
 
-    /* ─ Export / Share panel ─ */
-    .export-panel{background:var(--card);border:1px solid var(--green)44;border-radius:var(--radius);padding:14px;margin-bottom:14px;display:none}
-    .export-panel.visible{display:block}
-    .export-ta{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:7px;color:var(--text);padding:9px;font-size:.7rem;font-family:Consolas,monospace;resize:vertical;min-height:80px;direction:ltr;outline:none}
-    .share-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:7px;margin-top:9px}
-    .share-tile{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 6px;border-radius:9px;border:1px solid var(--border);background:var(--bg);cursor:pointer;transition:all .17s;text-align:center;font-size:.7rem;color:var(--muted);font-weight:600}
-    .share-tile:hover{border-color:var(--accent);color:var(--accent);background:var(--accent)0a}
-    .share-tile .ico{font-size:1.35rem}
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-    /* ─ Modals ─ */
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(5px);animation:fadeIn .18s}
-    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-    .modal-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;max-width:460px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:var(--shadow);animation:slideUp .22s}
-    @keyframes slideUp{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
-    .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-    .modal-title{font-size:.96rem;font-weight:700}
-    .modal-close{background:var(--bg);border:1px solid var(--border);color:var(--muted);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:all .14s}
-    .modal-close:hover{border-color:var(--red);color:var(--red)}
+    .pulse-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: var(--radius-full);
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--emerald);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
 
-    .qr-wrap{text-align:center;padding:8px 0}
-    .qr-wrap img{border-radius:10px;border:2px solid var(--border);max-width:100%}
-    .qr-nav{display:flex;gap:7px;justify-content:center;align-items:center;margin-top:10px;flex-wrap:wrap}
-    .qr-config-text{font-family:Consolas,monospace;font-size:.65rem;color:var(--muted);word-break:break-all;direction:ltr;margin-top:8px;padding:7px;background:var(--bg);border-radius:6px;border:1px solid var(--border)}
-    .sub-box{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:9px;font-family:Consolas,monospace;font-size:.68rem;word-break:break-all;direction:ltr;color:var(--accent);margin-top:7px;cursor:text}
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 8px var(--emerald);
+      animation: pulse 1.8s infinite;
+    }
 
-    /* ─ Access info panel ─ */
-    .access-panel{background:var(--card);border:1px solid var(--purple)33;border-radius:var(--radius);margin-bottom:14px;overflow:hidden}
-    .access-header{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer;user-select:none}
-    .access-header:hover{background:var(--purple)0a}
-    .access-body{padding:0 14px 14px;display:none}
-    .access-body.open{display:block}
-    .access-step{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;padding:9px;background:var(--bg);border-radius:8px;border:1px solid var(--border)}
-    .access-step .step-ico{font-size:1.2rem;flex-shrink:0;margin-top:1px}
-    .access-step .step-text{font-size:.76rem;line-height:1.55}
-    .access-step .step-title{font-weight:700;color:var(--text);margin-bottom:3px}
-    .code-inline{font-family:Consolas,monospace;font-size:.72rem;background:var(--bg);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--accent);direction:ltr;display:inline-block}
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
 
-    /* ─ Empty ─ */
-    .empty-state{text-align:center;padding:45px 20px;color:var(--muted)}
-    .empty-state .icon{font-size:2.4rem;margin-bottom:8px}
+    /* ─── Main Container ─────────────────────────────────────── */
+    .main-container {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
 
-    /* ─ Toast ─ */
-    #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 18px;border-radius:999px;font-size:.82rem;z-index:9999;transition:transform .27s;box-shadow:var(--shadow)}
-    #toast.show{transform:translateX(-50%) translateY(0)}
+    /* ─── Glassmorphism Panels ───────────────────────────────── */
+    .glass-panel {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-md);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
 
-    @media(max-width:540px){
-      .server-card{flex-wrap:wrap}
-      .card-acts{flex-direction:row}
-      .share-grid{grid-template-columns:repeat(3,1fr)}
-      .sel-bar{top:56px}
+    .glass-panel:hover {
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .panel-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ─── Buttons ────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-size: 0.86rem;
+      font-weight: 700;
+      font-family: inherit;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #041324;
+      box-shadow: 0 4px 18px var(--primary-glow);
+    }
+    .btn-primary:hover:not(:disabled) {
+      box-shadow: 0 6px 24px rgba(56, 189, 248, 0.45);
+      filter: brightness(1.08);
+    }
+
+    .btn-emerald {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: #022316;
+      box-shadow: 0 4px 18px var(--emerald-glow);
+    }
+    .btn-emerald:hover:not(:disabled) {
+      filter: brightness(1.1);
+      box-shadow: 0 6px 24px rgba(16, 185, 129, 0.45);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #e11d48, #f43f5e);
+      color: #fff;
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+    }
+    .btn-ghost:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-sm {
+      padding: 6px 13px;
+      font-size: 0.76rem;
+      border-radius: var(--radius-sm);
+    }
+
+    /* ─── Sources List & Inputs ──────────────────────────────── */
+    .sources-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 290px;
+      overflow-y: auto;
+      padding-left: 4px;
+    }
+
+    .source-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 8px 12px;
+      transition: all 0.2s;
+    }
+
+    .source-card:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      background: rgba(15, 23, 42, 0.85);
+    }
+
+    .src-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      white-space: nowrap;
+    }
+
+    .src-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', monospace;
+      font-size: 0.82rem;
+      outline: none;
+      direction: ltr;
+    }
+
+    .src-toggle {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .src-btn-del {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      transition: color 0.15s, background 0.15s;
+    }
+    .src-btn-del:hover {
+      color: var(--rose);
+      background: rgba(244, 63, 94, 0.15);
+    }
+
+    /* ─── Control Bar (Settings) ─────────────────────────────── */
+    .controls-grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .ctrl-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .select-styled {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      color: var(--text-main);
+      padding: 7px 12px;
+      font-size: 0.8rem;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+    }
+    .select-styled:focus {
+      border-color: var(--primary);
+    }
+
+    /* ─── Live Progress & Metrics Bar ────────────────────────── */
+    .progress-section {
+      margin-top: 16px;
+      display: none;
+    }
+
+    .progress-track {
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: var(--radius-full);
+      height: 8px;
+      overflow: hidden;
+      margin-bottom: 8px;
+      border: 1px solid var(--card-border);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--purple), var(--emerald));
+      border-radius: var(--radius-full);
+      transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .metrics-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .m-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 11px;
+      border-radius: var(--radius-full);
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+    }
+
+    .m-chip.cyan { border-color: rgba(56, 189, 248, 0.35); color: var(--primary); }
+    .m-chip.purple { border-color: rgba(168, 85, 247, 0.35); color: var(--purple); }
+    .m-chip.green { border-color: rgba(16, 185, 129, 0.35); color: var(--emerald); }
+    .m-chip.amber { border-color: rgba(245, 158, 11, 0.35); color: var(--amber); }
+
+    /* ─── Stats Dashboard Cards ──────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .stat-box:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .stat-val {
+      font-size: 1.65rem;
+      font-weight: 800;
+      line-height: 1.1;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .stat-lbl {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* ─── Floating Selection Bar ─────────────────────────────── */
+    .selection-bar {
+      position: sticky;
+      top: 74px;
+      z-index: 95;
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.95), rgba(99, 102, 241, 0.95));
+      backdrop-filter: blur(16px);
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 30px rgba(56, 189, 248, 0.35);
+      animation: slideDown 0.25s ease;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-15px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .selection-bar.active {
+      display: flex;
+    }
+
+    .sel-count-badge {
+      font-weight: 800;
+      color: #041324;
+      font-size: 0.9rem;
+    }
+
+    .sel-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn-sel {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-sel:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    /* ─── Filter & Protocol Pills ────────────────────────────── */
+    .filter-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      min-width: 220px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      padding: 10px 14px 10px 38px;
+      font-size: 0.86rem;
+      outline: none;
+      direction: ltr;
+      transition: all 0.2s;
+    }
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+
+    .protocol-pills {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .protocol-pills::-webkit-scrollbar { display: none; }
+
+    .proto-pill {
+      padding: 5px 13px;
+      border-radius: var(--radius-full);
+      font-size: 0.74rem;
+      font-weight: 700;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .proto-pill.active {
+      background: var(--primary);
+      color: #041324;
+      border-color: var(--primary);
+      box-shadow: 0 2px 12px var(--primary-glow);
+    }
+
+    /* ─── Server Cards Grid ──────────────────────────────────── */
+    .servers-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .server-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .server-card:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: var(--card-hover);
+      transform: translateX(-2px);
+    }
+
+    .server-card.selected {
+      border-color: var(--primary) !important;
+      background: rgba(56, 189, 248, 0.08) !important;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+    }
+
+    /* Podium Medals */
+    .server-card.podium-1 { border-color: rgba(255, 215, 0, 0.5); box-shadow: 0 0 20px rgba(255, 215, 0, 0.15); }
+    .server-card.podium-2 { border-color: rgba(192, 192, 192, 0.4); }
+    .server-card.podium-3 { border-color: rgba(205, 127, 50, 0.4); }
+
+    .card-checkbox-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-checkbox {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .rank-indicator {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .rk-1 { background: rgba(255, 215, 0, 0.2); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.5); }
+    .rk-2 { background: rgba(192, 192, 192, 0.2); color: #e2e8f0; border: 1px solid rgba(192, 192, 192, 0.5); }
+    .rk-3 { background: rgba(205, 127, 50, 0.2); color: #f97316; border: 1px solid rgba(205, 127, 50, 0.5); }
+    .rk-n { background: rgba(15, 23, 42, 0.8); color: var(--text-dim); border: 1px solid var(--card-border); }
+
+    .server-info-col {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .server-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .server-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      direction: ltr;
+    }
+
+    .tags-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 5px;
+    }
+
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.66rem;
+      padding: 1px 7px;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      direction: ltr;
+    }
+
+    /* Protocol Badges */
+    .bg-vless { background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); }
+    .bg-trojan { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .bg-hy2 { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+    .bg-vmess { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .bg-ss { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .bg-default { background: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); }
+
+    /* Latency Meter */
+    .latency-col {
+      text-align: center;
+      min-width: 65px;
+      flex-shrink: 0;
+    }
+
+    .latency-value {
+      font-size: 1.15rem;
+      font-weight: 900;
+      font-family: 'Plus Jakarta Sans', monospace;
+      line-height: 1;
+    }
+
+    .latency-unit {
+      font-size: 0.62rem;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    .spinner-ping {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Action Buttons */
+    .card-actions-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .icon-action-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .icon-action-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: rgba(56, 189, 248, 0.1);
+    }
+    .icon-action-btn.copied {
+      border-color: var(--emerald);
+      color: var(--emerald);
+      background: rgba(16, 185, 129, 0.15);
+    }
+
+    /* ─── Export & Share Section ─────────────────────────────── */
+    .export-card {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(15, 23, 42, 0.8));
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      margin-bottom: 20px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    .export-card.visible { display: block; }
+
+    .export-textarea {
+      width: 100%;
+      background: rgba(9, 13, 22, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      color: #38bdf8;
+      font-family: 'Consolas', monospace;
+      font-size: 0.74rem;
+      padding: 12px;
+      min-height: 90px;
+      resize: vertical;
+      direction: ltr;
+      outline: none;
+      margin-top: 10px;
+    }
+
+    .share-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .share-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 8px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .share-item:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: rgba(56, 189, 248, 0.08);
+      transform: translateY(-2px);
+    }
+    .share-item .icon { font-size: 1.4rem; }
+
+    /* ─── Modals ─────────────────────────────────────────────── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(9, 13, 22, 0.82);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeIn 0.2s;
+    }
+    .modal-backdrop.open { display: flex; }
+
+    .modal-window {
+      background: #111827;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-md);
+      animation: zoomIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    @keyframes zoomIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .modal-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .qr-frame {
+      text-align: center;
+      padding: 10px 0;
+    }
+    .qr-frame img {
+      border-radius: var(--radius-md);
+      border: 2px solid var(--card-border);
+      max-width: 100%;
+      box-shadow: var(--shadow-md);
+    }
+
+    .code-box {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      font-family: Consolas, monospace;
+      font-size: 0.7rem;
+      color: var(--primary);
+      word-break: break-all;
+      direction: ltr;
+      margin-top: 10px;
+    }
+
+    /* ─── Toast ──────────────────────────────────────────────── */
+    #toastMessage {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(90px);
+      background: rgba(17, 24, 39, 0.95);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 10px 22px;
+      border-radius: var(--radius-full);
+      font-size: 0.84rem;
+      font-weight: 700;
+      z-index: 9999;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #toastMessage.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ─── Responsive Queries ─────────────────────────────────── */
+    @media (max-width: 640px) {
+      .app-header { padding: 12px 14px; }
+      .logo-text h1 { font-size: 1.05rem; }
+      .logo-icon { width: 38px; height: 38px; font-size: 1.2rem; }
+      .main-container { padding: 14px 10px; }
+      .glass-panel { padding: 14px; }
+      .server-card { flex-wrap: wrap; padding: 12px; gap: 10px; }
+      .card-actions-col { flex-direction: row; }
+      .selection-bar { top: 62px; }
     }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>⚡ Trojan Fast Tester</h1>
-  <p>تست موازی هوشمند | چند منبع | انتخاب گروهی | ۷ روش اشتراک</p>
+<!-- ══════════════════════════════════════════════════════════════
+     HEADER / TOP APP BAR
+     ══════════════════════════════════════════════════════════════ -->
+<header class="app-header">
+  <div class="header-content">
+    <div class="logo-area">
+      <div class="logo-icon">⚡</div>
+      <div class="logo-text">
+        <h1>V2Ray & Trojan Speed Tester</h1>
+        <p>تست سرعت هوشمند موازی — VLESS • Trojan • Hysteria 2 • VMess</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="pulse-badge" id="liveStatusBadge">
+        <span class="pulse-dot"></span>
+        <span id="liveStatusText">آماده تست</span>
+      </div>
+    </div>
+  </div>
 </header>
 
-<div class="container">
+<main class="main-container">
 
-  <!-- Mobile / Public Access Info -->
-  <div class="access-panel">
-    <div class="access-header" onclick="toggleAccess()">
-      <span style="font-size:.8rem;font-weight:700;color:var(--purple)">📱 دسترسی از موبایل و خارج از شبکه</span>
-      <span id="accessArrow" style="color:var(--muted);font-size:.9rem">▼</span>
+  <!-- ════════════════════════════════════════════════════════════
+       SOURCES & SUBSCRIPTION MANAGER
+       ════════════════════════════════════════════════════════════ -->
+  <section class="glass-panel">
+    <div class="panel-head">
+      <div class="panel-title">
+        <span>📡 منابع و لینک‌های سابسکریپشن</span>
+        <span class="src-badge" id="activeSourcesCountBadge">۶ منبع پیش‌فرض</span>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="addNewSourceRow()">＋ افزودن لینک جدید</button>
     </div>
-    <div class="access-body" id="accessBody">
-      <div class="access-step">
-        <span class="step-ico">💻</span>
-        <div class="step-text">
-          <div class="step-title">گام ۱ — اجرای سرور روی کامپیوتر</div>
-          فایل <span class="code-inline">start-server.bat</span> را در پوشه برنامه اجرا کنید.
-          سرور روی پورت <span class="code-inline">8080</span> شروع به کار می‌کند.
-        </div>
-      </div>
-      <div class="access-step">
-        <span class="step-ico">📱</span>
-        <div class="step-text">
-          <div class="step-title">گام ۲ — دسترسی از موبایل (همان WiFi)</div>
-          وقتی سرور اجرا شد، آدرس IP کامپیوتر نمایش داده می‌شود.
-          روی موبایل: <span class="code-inline">http://192.168.x.x:8080</span>
-        </div>
-      </div>
-      <div class="access-step">
-        <span class="step-ico">🌐</span>
-        <div class="step-text">
-          <div class="step-title">گام ۳ — دسترسی از خارج از شبکه (اینترنت عمومی)</div>
-          فایل <span class="code-inline">start-tunnel.bat</span> را اجرا کنید.
-          یک URL عمومی مثل <span class="code-inline">https://xxxx.trycloudflare.com</span>
-          ساخته می‌شود. بدون نیاز به حساب کاربری!
-        </div>
-      </div>
-      <div class="access-step">
-        <span class="step-ico">🚀</span>
-        <div class="step-text">
-          <div class="step-title">گام ۴ (اختیاری) — هاست دائمی رایگان</div>
-          فایل <span class="code-inline">index.html</span> را روی
-          <span class="code-inline">GitHub Pages</span> یا
-          <span class="code-inline">Netlify</span> آپلود کنید.
-          لینک دائمی HTTPS خواهید داشت.
-        </div>
-      </div>
+
+    <div class="sources-container" id="sourcesWrapper">
+      <!-- Injected by JavaScript -->
     </div>
-  </div>
 
-  <!-- Sources Panel -->
-  <div class="panel">
-    <div class="panel-title">📡 منابع Subscription</div>
-    <div id="sourcesList"></div>
-    <button class="btn btn-outline btn-sm" onclick="addSource()" style="margin-top:4px">＋ افزودن منبع</button>
-
-    <div class="ctrl-row">
-      <label style="color:var(--muted);font-size:.78rem;white-space:nowrap">⏱ تایم‌اوت:
-        <select class="sel" id="timeoutSel">
-          <option value="2000">۲s</option>
-          <option value="4000" selected>۴s</option>
-          <option value="7000">۷s</option>
-          <option value="10000">۱۰s</option>
+    <div class="controls-grid">
+      <div class="ctrl-group">
+        <span>⏱ حداکثر تایم‌اوت:</span>
+        <select class="select-styled" id="timeoutConfigSelect">
+          <option value="2000">۲ ثانیه (فوق‌سریع)</option>
+          <option value="3500" selected>۳.۵ ثانیه (پیشنهادی)</option>
+          <option value="6000">۶ ثانیه</option>
+          <option value="10000">۱۰ ثانیه</option>
         </select>
-      </label>
-      <label style="color:var(--muted);font-size:.78rem;white-space:nowrap">⚡ همزمانی:
-        <select class="sel" id="concSel">
-          <option value="8">۸</option>
-          <option value="15" selected>۱۵</option>
-          <option value="25">۲۵</option>
+      </div>
+
+      <div class="ctrl-group">
+        <span>⚡ همزمانی اولیه:</span>
+        <select class="select-styled" id="concurrencyConfigSelect">
+          <option value="10">۱۰ کانکشن</option>
+          <option value="18" selected>۱۸ کانکشن (هوشمند AIMD)</option>
+          <option value="30">۳۰ کانکشن (حداکثر)</option>
         </select>
-      </label>
-      <button class="btn btn-primary" id="startBtn" onclick="startTest()">▶ شروع تست</button>
-      <button class="btn btn-danger"  id="stopBtn"  onclick="stopTest()" style="display:none">⏹ توقف</button>
+      </div>
+
+      <div style="margin-right: auto; display: flex; gap: 8px;">
+        <button class="btn btn-primary" id="startTestButton" onclick="startUnifiedTest()">
+          <span>▶</span> شروع تست همه‌جانبه
+        </button>
+        <button class="btn btn-danger" id="stopTestButton" onclick="stopUnifiedTest()" style="display:none;">
+          <span>⏹</span> توقف
+        </button>
+      </div>
     </div>
 
-    <div class="algo-bar" id="algoBar" style="display:none">
-      <span class="chip chip-b">⚡ موازی: <val id="cConc">0</val></span>
-      <span class="chip chip-p">🏎 سرعت: <val id="cRate">0</val>/s</span>
-      <span class="chip chip-g">⏳ ETA: <val id="cEta">…</val></span>
-      <span class="chip chip-y">🧠 AIMD</span>
-      <span class="chip chip-b" id="cSrcChip" style="display:none">📡 <val id="cSrcCount">0</val> منبع</span>
-      <span class="chip chip-g" id="cCacheChip" style="display:none">💾 کش</span>
-    </div>
-    <div class="phase-bar" id="phaseBar" style="display:none">
-      <div class="phase-item" id="ph1">فاز ۱: اسکن</div>
-      <div class="phase-item" id="ph2">فاز ۲: عمیق</div>
-      <div class="phase-item" id="ph3">پایان ✅</div>
-    </div>
-    <div id="progSection" style="display:none;margin-top:10px">
-      <div class="prog-wrap"><div class="prog-bar" id="progBar"></div></div>
-      <div class="prog-meta"><span id="progLabel">در حال آماده‌سازی…</span><span id="progPct">0%</span></div>
-    </div>
-  </div>
+    <!-- Live Progress Bar -->
+    <div class="progress-section" id="progressSection">
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFillBar"></div>
+      </div>
+      <div class="progress-info">
+        <span id="progressStatusLabel">در حال دریافت کانفیگ‌ها…</span>
+        <span id="progressPercentLabel">0%</span>
+      </div>
 
-  <!-- Stats -->
-  <div class="stats-bar">
-    <div class="stat-card"><div class="num" id="sTotal">0</div><div class="lbl">کل سرور</div></div>
-    <div class="stat-card"><div class="num" style="color:var(--green)"  id="sOnline">0</div><div class="lbl">آنلاین ✅</div></div>
-    <div class="stat-card"><div class="num" style="color:var(--yellow)" id="sSlow">0</div><div class="lbl">آهسته ⚠️</div></div>
-    <div class="stat-card"><div class="num" style="color:var(--red)"    id="sOff">0</div><div class="lbl">آفلاین ❌</div></div>
-    <div class="stat-card"><div class="num" style="color:var(--accent)" id="sAvg">—</div><div class="lbl">میانگین</div></div>
-    <div class="stat-card"><div class="num" style="color:var(--purple)" id="sBest">—</div><div class="lbl">بهترین</div></div>
-  </div>
-
-  <!-- Export Panel -->
-  <div class="export-panel" id="exportPanel">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px">
-      <div style="font-size:.8rem;font-weight:700;color:var(--green)">📋 بهترین سرورها آماده‌اند</div>
-      <div style="font-size:.7rem;color:var(--muted)" id="exportCount"></div>
+      <div class="metrics-chips">
+        <span class="m-chip cyan">⚡ کانکشن فعال: <b id="chipActiveConn">0</b></span>
+        <span class="m-chip purple">🏎 سرعت: <b id="chipSpeedRate">0</b> req/s</span>
+        <span class="m-chip green">⏳ تخمین زمان: <b id="chipEtaTime">…</b></span>
+        <span class="m-chip amber">🧠 الگوریتم AIMD فعال</span>
+      </div>
     </div>
-    <textarea class="export-ta" id="exportText" readonly></textarea>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       STATS DASHBOARD
+       ════════════════════════════════════════════════════════════ -->
+  <section class="stats-grid">
+    <div class="stat-box">
+      <div class="stat-val" id="statTotalCount" style="color: var(--primary);">0</div>
+      <div class="stat-lbl">کل سرورها</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="statOnlineCount" style="color: var(--emerald);">0</div>
+      <div class="stat-lbl">آنلاین و سالم ✅</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="statSlowCount" style="color: var(--amber);">0</div>
+      <div class="stat-lbl">متوسط و کند ⚠️</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="statDeadCount" style="color: var(--rose);">0</div>
+      <div class="stat-lbl">آفلاین ❌</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="statAvgPing" style="color: #38bdf8;">—</div>
+      <div class="stat-lbl">میانگین پینگ</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="statBestPing" style="color: #a855f7;">—</div>
+      <div class="stat-lbl">بهترین پینگ 🚀</div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       EXPORT & SHARING PANEL (Reveals after test)
+       ════════════════════════════════════════════════════════════ -->
+  <section class="export-card" id="exportCardSection">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="font-size: 0.92rem; font-weight: 800; color: var(--emerald);">
+        🎉 بهترین و سریع‌ترین سرورها استخراج شدند
+      </div>
+      <span class="src-badge" id="exportCountBadge">0 سرور</span>
+    </div>
+
+    <textarea class="export-textarea" id="exportTextarea" readonly></textarea>
+
     <div class="share-grid">
-      <div class="share-tile" onclick="copyExport()"><span class="ico">📋</span>کپی همه</div>
-      <div class="share-tile" onclick="dlExport()"><span class="ico">⬇️</span>دانلود</div>
-      <div class="share-tile" onclick="showBulkQR()"><span class="ico">📱</span>QR Code</div>
-      <div class="share-tile" onclick="showSubLink()"><span class="ico">🔗</span>Subscription</div>
-      <div class="share-tile" onclick="shareViaURL()"><span class="ico">🌐</span>لینک URL</div>
-      <div class="share-tile" onclick="shareNative()"><span class="ico">📤</span>اشتراک</div>
-      <div class="share-tile" onclick="shareViaTelegram()"><span class="ico">✈️</span>تلگرام</div>
-      <div class="share-tile" onclick="clearCache()" style="color:var(--red)"><span class="ico">🗑️</span>پاک کردن کش</div>
+      <div class="share-item" onclick="copyAllExportConfigs()">
+        <span class="icon">📋</span>
+        <span>کپی همه</span>
+      </div>
+      <div class="share-item" onclick="downloadExportFile()">
+        <span class="icon">⬇️</span>
+        <span>دانلود .txt</span>
+      </div>
+      <div class="share-item" onclick="openBulkQRModal()">
+        <span class="icon">📱</span>
+        <span>QR اسلایدر</span>
+      </div>
+      <div class="share-item" onclick="openSubscriptionLinkModal()">
+        <span class="icon">🔗</span>
+        <span>لینک ساب</span>
+      </div>
+      <div class="share-item" onclick="openShareURLModal()">
+        <span class="icon">🌐</span>
+        <span>لینک وب</span>
+      </div>
+      <div class="share-item" onclick="triggerNativeShare()">
+        <span class="icon">📤</span>
+        <span>اشتراک عمومی</span>
+      </div>
+      <div class="share-item" onclick="shareToTelegram()">
+        <span class="icon">✈️</span>
+        <span>تلگرام</span>
+      </div>
+      <div class="share-item" onclick="clearCachedResults()" style="color: var(--rose);">
+        <span class="icon">🗑️</span>
+        <span>پاکسازی کش</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       STICKY SELECTION TOOLBAR
+       ════════════════════════════════════════════════════════════ -->
+  <div class="selection-bar" id="selectionToolbar">
+    <div class="sel-count-badge" id="selectedCountText">۰ سرور انتخاب شده</div>
+    <div class="sel-actions">
+      <button class="btn-sel" onclick="selectOnlineOnly()">✅ آنلاین‌ها</button>
+      <button class="btn-sel" onclick="selectAllVisible()">همه</button>
+      <button class="btn-sel" onclick="clearSelection()">✕ لغو</button>
+      <div style="width:1px;height:18px;background:rgba(255,255,255,0.3);margin:0 4px;"></div>
+      <button class="btn-sel" onclick="copySelectedConfigs()">📋 کپی</button>
+      <button class="btn-sel" onclick="downloadSelectedConfigs()">⬇ دانلود</button>
+      <button class="btn-sel" onclick="openSelectedQRModal()">📱 QR</button>
+      <button class="btn-sel" onclick="shareSelectedTelegram()">✈️ تلگرام</button>
     </div>
   </div>
 
-  <!-- Selection Toolbar -->
-  <div class="sel-bar" id="selBar">
-    <span class="sel-count" id="selCount">۰ انتخاب‌شده</span>
-    <button class="btn-sel" onclick="selectOnline()">✅ آنلاین‌ها</button>
-    <button class="btn-sel" onclick="selectAll()">همه</button>
-    <button class="btn-sel" onclick="clearSelection()">✕ لغو</button>
-    <div class="sel-div"></div>
-    <button class="btn-sel" onclick="copySelected()">📋 کپی</button>
-    <button class="btn-sel" onclick="downloadSelected()">⬇ دانلود</button>
-    <button class="btn-sel" onclick="qrSelected()">📱 QR</button>
-    <button class="btn-sel" onclick="telegramSelected()">✈️ تلگرام</button>
-    <button class="btn-sel" onclick="nativeSelected()">📤 اشتراک</button>
-  </div>
-
-  <!-- Filter Row -->
-  <div class="filter-row">
-    <input class="search-box" id="searchBox" type="text" placeholder="🔍 جستجو (IP, SNI …)" oninput="renderCards()"/>
-    <select class="sel" id="sortSel" onchange="renderCards()">
-      <option value="latency">بهترین پینگ اول</option>
-      <option value="latency_d">بدترین پینگ اول</option>
-      <option value="ip">ترتیب IP</option>
-    </select>
-    <button class="badge-f" id="fb-all"     onclick="setF('all')">همه</button>
-    <button class="badge-f" id="fb-online"  onclick="setF('online')">✅ آنلاین</button>
-    <button class="badge-f" id="fb-slow"    onclick="setF('slow')">⚠️ آهسته</button>
-    <button class="badge-f" id="fb-offline" onclick="setF('offline')">❌ آفلاین</button>
-  </div>
-
-  <div id="serverGrid">
-    <div class="empty-state">
-      <div class="icon">⚡</div>
-      <p>منابع Subscription را اضافه کن و تست را شروع کن</p>
+  <!-- ════════════════════════════════════════════════════════════
+       FILTER & SEARCH ROW
+       ════════════════════════════════════════════════════════════ -->
+  <section class="filter-section">
+    <div class="filter-row">
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="searchFilterInput" placeholder="جستجو در IP، پروتکل، پورت، SNI و نام سرور…" oninput="renderServerCards()"/>
+      </div>
+      <select class="select-styled" id="sortOrderSelect" onchange="renderServerCards()">
+        <option value="latency_asc">مرتب‌سازی: کمترین پینگ اول</option>
+        <option value="latency_desc">مرتب‌سازی: بیشترین پینگ</option>
+        <option value="proto">مرتب‌سازی: بر اساس پروتکل</option>
+        <option value="ip">مرتب‌سازی: بر اساس IP</option>
+      </select>
     </div>
-  </div>
-</div>
+
+    <div class="protocol-pills">
+      <div class="proto-pill active" onclick="setProtocolFilter('all', this)">همه پروتکل‌ها</div>
+      <div class="proto-pill" onclick="setProtocolFilter('vless', this)">🟣 VLESS</div>
+      <div class="proto-pill" onclick="setProtocolFilter('trojan', this)">🔵 Trojan</div>
+      <div class="proto-pill" onclick="setProtocolFilter('hysteria2', this)">🔴 Hysteria 2</div>
+      <div class="proto-pill" onclick="setProtocolFilter('vmess', this)">🟣 VMess</div>
+      <div class="proto-pill" onclick="setProtocolFilter('ss', this)">🟡 Shadowsocks</div>
+      <div class="proto-pill" onclick="setStatusFilter('online', this)">✅ فقط آنلاین</div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       SERVERS LIST
+       ════════════════════════════════════════════════════════════ -->
+  <section class="servers-grid" id="serversListContainer">
+    <div class="glass-panel" style="text-align: center; padding: 50px 20px;">
+      <div style="font-size: 2.8rem; margin-bottom: 12px;">🚀</div>
+      <h3 style="font-size: 1.1rem; margin-bottom: 6px;">آماده شروع تست هوشمند</h3>
+      <p style="color: var(--text-muted); font-size: 0.84rem;">دکمه «شروع تست همه‌جانبه» را بزنید تا تمام کانفیگ‌های منابع با الگوریتم موازی بررسی شوند.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════════════
+     MODALS
+     ══════════════════════════════════════════════════════════════ -->
 
 <!-- QR Modal -->
-<div id="qrModal" class="modal-overlay" style="display:none" onclick="closeModal('qrModal')">
-  <div class="modal-box" onclick="event.stopPropagation()">
+<div class="modal-backdrop" id="qrModalBackdrop" onclick="closeModal('qrModalBackdrop')">
+  <div class="modal-window" onclick="event.stopPropagation()">
     <div class="modal-header">
-      <div class="modal-title" id="qrTitle">📱 QR Code</div>
-      <button class="modal-close" onclick="closeModal('qrModal')">✕</button>
+      <div class="modal-title" id="qrModalTitle">📱 QR Code اسکن سریع</div>
+      <button class="icon-action-btn" onclick="closeModal('qrModalBackdrop')">✕</button>
     </div>
-    <div class="qr-wrap"><img id="qrImg" src="" alt="QR"/></div>
-    <div class="qr-config-text" id="qrConfigText"></div>
-    <div class="qr-nav" id="qrNav"></div>
-    <div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap">
-      <button class="btn btn-green"   onclick="downloadQR()">⬇ دانلود QR</button>
-      <button class="btn btn-outline" onclick="copyQRConfig()">📋 کپی کانفیگ</button>
+    <div class="qr-frame">
+      <img id="qrModalImage" src="" alt="QR Code"/>
+    </div>
+    <div class="code-box" id="qrModalRawText"></div>
+    <div style="display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 12px;" id="qrCarouselNav">
+      <!-- Injected -->
+    </div>
+    <div style="display: flex; gap: 8px; margin-top: 14px;">
+      <button class="btn btn-emerald" style="flex:1;" onclick="downloadActiveQRImage()">⬇ دانلود تصویر QR</button>
+      <button class="btn btn-ghost" style="flex:1;" onclick="copyActiveQRConfig()">📋 کپی کانفیگ</button>
     </div>
   </div>
 </div>
 
-<!-- Sub Modal -->
-<div id="subModal" class="modal-overlay" style="display:none" onclick="closeModal('subModal')">
-  <div class="modal-box" onclick="event.stopPropagation()">
+<!-- Subscription Link Modal -->
+<div class="modal-backdrop" id="subModalBackdrop" onclick="closeModal('subModalBackdrop')">
+  <div class="modal-window" onclick="event.stopPropagation()">
     <div class="modal-header">
-      <div class="modal-title">🔗 لینک Subscription</div>
-      <button class="modal-close" onclick="closeModal('subModal')">✕</button>
+      <div class="modal-title">🔗 لینک سابسکریپشن Base64</div>
+      <button class="icon-action-btn" onclick="closeModal('subModalBackdrop')">✕</button>
     </div>
-    <p style="font-size:.78rem;color:var(--muted);margin-bottom:10px">لینک رمزگذاری‌شده Base64 — در هر اپ سازگار وارد کنید:</p>
-    <div class="sub-box" id="subBase64Text" onclick="copySubB64()"></div>
-    <div class="qr-wrap" style="margin-top:12px"><img id="subQrImg" src="" alt="Sub QR" style="width:180px;height:180px"/></div>
-    <div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap">
-      <button class="btn btn-green"  onclick="copySubB64()">📋 کپی لینک</button>
-      <button class="btn btn-outline" onclick="dlExport()">⬇ دانلود فایل</button>
-    </div>
-    <div style="margin-top:10px;padding:9px;background:var(--bg);border-radius:7px;border:1px solid var(--border)">
-      <div style="font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:5px">📋 راهنمای ایمپورت:</div>
-      <div style="font-size:.69rem;color:var(--muted);line-height:1.7">
-        🔵 <b>v2rayNG:</b> ⋮ → Import from URL → paste<br>
-        🟣 <b>Hiddify:</b> Add Profile → URL → paste<br>
-        🟡 <b>NekoBox:</b> Proxies → New Group → URL<br>
-        🟢 <b>Clash Meta:</b> Proxy → Add → URL Test
-      </div>
+    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">
+      این لینک استاندارد را در هر نرم‌افزاری مانند v2rayNG، Hiddify، NekoBox یا Clash اضافه کنید:
+    </p>
+    <div class="code-box" id="subBase64PreviewText" onclick="copySubscriptionBase64()" style="cursor: pointer;"></div>
+    <div style="display: flex; gap: 8px; margin-top: 14px;">
+      <button class="btn btn-emerald" style="flex:1;" onclick="copySubscriptionBase64()">📋 کپی متن Base64</button>
+      <button class="btn btn-ghost" style="flex:1;" onclick="downloadExportFile()">⬇ دانلود فایل ساب</button>
     </div>
   </div>
 </div>
 
-<!-- URL Share Modal -->
-<div id="urlModal" class="modal-overlay" style="display:none" onclick="closeModal('urlModal')">
-  <div class="modal-box" onclick="event.stopPropagation()">
+<!-- Share URL Modal -->
+<div class="modal-backdrop" id="urlModalBackdrop" onclick="closeModal('urlModalBackdrop')">
+  <div class="modal-window" onclick="event.stopPropagation()">
     <div class="modal-header">
-      <div class="modal-title">🌐 لینک اشتراک‌گذاری</div>
-      <button class="modal-close" onclick="closeModal('urlModal')">✕</button>
+      <div class="modal-title">🌐 اشتراک‌گذاری از طریق لینک وب</div>
+      <button class="icon-action-btn" onclick="closeModal('urlModalBackdrop')">✕</button>
     </div>
-    <p style="font-size:.78rem;color:var(--muted);margin-bottom:10px">این لینک را برای دیگران بفرست — باز کردنش کانفیگ‌ها را لود می‌کند:</p>
-    <div class="sub-box" id="shareUrlText" onclick="copyShareUrl()"></div>
-    <div class="qr-wrap" style="margin-top:12px"><img id="urlQrImg" src="" alt="URL QR" style="width:180px;height:180px"/></div>
-    <div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap">
-      <button class="btn btn-green"  onclick="copyShareUrl()">📋 کپی لینک</button>
-      <button class="btn btn-outline" onclick="openShareUrl()">🔗 باز کردن</button>
+    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">
+      با ارسال این لینک به دوستانتان، بهترین سرورها مستقیماً در مرورگر آنها بارگذاری خواهند شد:
+    </p>
+    <div class="code-box" id="webShareLinkText" onclick="copyWebShareURL()" style="cursor: pointer;"></div>
+    <div style="display: flex; gap: 8px; margin-top: 14px;">
+      <button class="btn btn-emerald" style="flex:1;" onclick="copyWebShareURL()">📋 کپی لینک</button>
+      <button class="btn btn-ghost" style="flex:1;" onclick="openWebShareURL()">🔗 باز کردن</button>
     </div>
   </div>
 </div>
 
-<!-- Single Server Share Modal -->
-<div id="ssModal" class="modal-overlay" style="display:none" onclick="closeModal('ssModal')">
-  <div class="modal-box" onclick="event.stopPropagation()">
-    <div class="modal-header">
-      <div class="modal-title">📤 اشتراک‌گذاری سرور</div>
-      <button class="modal-close" onclick="closeModal('ssModal')">✕</button>
-    </div>
-    <div style="background:var(--bg);border-radius:7px;padding:9px;margin-bottom:12px;border:1px solid var(--border)">
-      <div style="font-size:.8rem;font-weight:700;direction:ltr" id="ssName"></div>
-      <div style="font-size:.7rem;color:var(--muted);margin-top:3px" id="ssMeta"></div>
-    </div>
-    <div style="text-align:center;margin-bottom:12px">
-      <img id="ssQr" src="" alt="QR" style="border-radius:10px;border:2px solid var(--border);width:210px;height:210px"/>
-      <div style="font-size:.67rem;color:var(--muted);margin-top:5px">اسکن با دوربین یا v2rayNG</div>
-    </div>
-    <div class="share-grid" id="ssGrid"></div>
-  </div>
+<!-- Toast Message Notification -->
+<div id="toastMessage">
+  <span id="toastIcon">✅</span>
+  <span id="toastText">عملیات با موفقیت انجام شد</span>
 </div>
 
-<div id="toast"></div>
-
+<!-- ══════════════════════════════════════════════════════════════
+     JAVASCRIPT LOGIC ENGINE
+     ══════════════════════════════════════════════════════════════ -->
 <script>
-/* ════════════════════════════════════════════
-   STATE
-   ════════════════════════════════════════════ */
-let servers       = [];
-let aborted       = false;
-let activeFilter  = 'all';
-let concurrency   = 15;
-let wins          = 0;
-let testStart     = 0;
-let testedCount   = 0;
-let selected      = new Set(); // indices of selected servers
-let _qrIdx        = 0;
-let _qrList       = [];
-let _ssIdx        = -1;
-let srcCounter    = 0;
+/* ─── State Management ─────────────────────────────────────── */
+let serverList = [];
+let selectedSet = new Set();
+let isTestingAborted = false;
+let currentProtocolFilter = 'all';
+let currentStatusFilter = 'all';
+let concurrencyLimit = 18;
+let consecutiveWins = 0;
+let testStartTime = 0;
+let totalProcessed = 0;
 
-const CACHE_KEY = 'trojanTesterCacheV3';
-const CACHE_TTL = 3_600_000;
+let qrCarouselItems = [];
+let qrCarouselCurrentIndex = 0;
 
-/* ════════════════════════════════════════════
-   SOURCES MANAGEMENT
-   ════════════════════════════════════════════ */
-const DEFAULT_SOURCES = [
-  'https://raw.githubusercontent.com/ShatakVPN/ConfigForge-V2Ray/main/configs/us/trojan.txt'
+const STORAGE_CACHE_KEY = 'v2ray_speedtest_cache_v4';
+const CACHE_LIFETIME = 3600000; // 1 hour
+
+/* ─── Pre-loaded Subscription Sources (From User) ──────────── */
+const INITIAL_SOURCES = [
+  { url: 'https://raw.githubusercontent.com/ShatakVPN/ConfigForge-V2Ray/main/configs/us/trojan.txt', badge: 'Trojan US', enabled: true },
+  { url: 'https://raw.githubusercontent.com/ShatakVPN/ConfigForge-V2Ray/main/configs/us/vless.txt', badge: 'VLESS US', enabled: true },
+  { url: 'https://raw.githubusercontent.com/ShatakVPN/ConfigForge-V2Ray/main/configs/us/hysteria2.txt', badge: 'Hy2 US', enabled: true },
+  { url: 'https://raw.githubusercontent.com/MatinGhanbari/v2ray-configs/main/subscriptions/v2ray/super-sub.txt', badge: 'Super Sub', enabled: true },
+  { url: 'https://raw.githubusercontent.com/arshiacomplus/v2rayExtractor/main/loc/US%20%F0%9F%87%BA%F0%9F%87%B8.txt', badge: 'Extractor US', enabled: true },
+  { url: 'https://zood.link/Motasel_Ba_Hame_Chi', badge: 'Direct Sub', enabled: true }
 ];
 
-function addSource(url = '') {
-  const id = 'src-' + (srcCounter++);
-  const row = document.createElement('div');
-  row.className = 'source-row';
-  row.id = id;
-  row.innerHTML = `
-    <input class="url-input" type="url" value="${escH(url)}" placeholder="آدرس subscription URL …"/>
-    <button class="src-remove" onclick="removeSource('${id}')">✕</button>`;
-  document.getElementById('sourcesList').appendChild(row);
+/* ─── Sources List Rendering ───────────────────────────────── */
+function renderSourcesUI() {
+  const container = document.getElementById('sourcesWrapper');
+  container.innerHTML = '';
+
+  INITIAL_SOURCES.forEach((src, idx) => {
+    const card = document.createElement('div');
+    card.className = 'source-card';
+    card.id = `srcCard_${idx}`;
+    card.innerHTML = `
+      <input type="checkbox" class="src-toggle" ${src.enabled ? 'checked' : ''} onchange="toggleSource(${idx}, this.checked)"/>
+      <span class="src-badge">${escapeHtml(src.badge || 'Source')}</span>
+      <input type="text" class="src-input" value="${escapeHtml(src.url)}" onchange="updateSourceURL(${idx}, this.value)" placeholder="https://..."/>
+      <button class="src-btn-del" onclick="deleteSource(${idx})" title="حذف منبع">✕</button>
+    `;
+    container.appendChild(card);
+  });
+
+  const activeCount = INITIAL_SOURCES.filter(s => s.enabled).length;
+  document.getElementById('activeSourcesCountBadge').textContent = `${activeCount} منبع فعال`;
 }
 
-function removeSource(id) {
-  const el = document.getElementById(id);
-  if (el && document.getElementById('sourcesList').children.length > 1) el.remove();
-  else showToast('⚠️ حداقل یک منبع باید باشد');
+function toggleSource(idx, enabled) {
+  INITIAL_SOURCES[idx].enabled = enabled;
+  renderSourcesUI();
 }
 
-function getSources() {
-  return [...document.querySelectorAll('#sourcesList .url-input')]
-    .map(el => el.value.trim()).filter(Boolean);
+function updateSourceURL(idx, url) {
+  INITIAL_SOURCES[idx].url = url.trim();
 }
 
-/* ════════════════════════════════════════════
-   PARSE
-   ════════════════════════════════════════════ */
-function parseTrojan(raw) {
+function deleteSource(idx) {
+  if (INITIAL_SOURCES.length <= 1) {
+    showToast('⚠️ حداقل یک منبع باید باقی بماند', '⚠️');
+    return;
+  }
+  INITIAL_SOURCES.splice(idx, 1);
+  renderSourcesUI();
+}
+
+function addNewSourceRow() {
+  INITIAL_SOURCES.push({
+    url: '',
+    badge: `Sub ${INITIAL_SOURCES.length + 1}`,
+    enabled: true
+  });
+  renderSourcesUI();
+  // Scroll to bottom
+  const container = document.getElementById('sourcesWrapper');
+  container.scrollTop = container.scrollHeight;
+}
+
+/* ─── Multi-Protocol Universal Parser ───────────────────────── */
+function decodeBase64Safe(str) {
   try {
-    const url  = new URL(raw.trim());
-    const ip   = url.hostname;
-    const port = url.port || '443';
-    const p    = Object.fromEntries(url.searchParams);
-    return { raw, ip, port,
-      sni:  p.sni  || p.host || ip,
-      host: p.host || ip,
-      path: p.path || '/',
-      type: p.type || 'tcp',
-      tag:  decodeURIComponent(url.hash.slice(1)) };
-  } catch { return null; }
+    str = str.replace(/-/g, '+').replace(/_/g, '/');
+    while (str.length % 4) str += '=';
+    return decodeURIComponent(escape(atob(str)));
+  } catch (e) {
+    try { return atob(str); } catch (err) { return null; }
+  }
 }
 
-/* ════════════════════════════════════════════
-   PROBES
-   ════════════════════════════════════════════ */
-function probeWS(host, port, path, timeout) {
-  return new Promise(resolve => {
-    const t0=performance.now(); let done=false;
-    const fin=ms=>{if(!done){done=true;resolve(ms);}};
-    const tm=setTimeout(()=>fin(null), timeout);
-    try {
-      const ws=new WebSocket(`wss://${host}:${port}${path||'/'}`);
-      ws.onopen=()=>{clearTimeout(tm);ws.close();fin(Math.round(performance.now()-t0));};
-      ws.onerror=ws.onclose=()=>{
-        clearTimeout(tm);const el=Math.round(performance.now()-t0);
-        fin(el<timeout*0.6?el:null);
+function parseUniversalProxyURI(rawURI) {
+  try {
+    const trimmed = rawURI.trim();
+    if (!trimmed) return null;
+
+    // 1. VMess JSON Base64 Parser
+    if (trimmed.startsWith('vmess://')) {
+      const b64 = trimmed.slice(8);
+      const jsonStr = decodeBase64Safe(b64);
+      if (!jsonStr) return null;
+      const data = JSON.parse(jsonStr);
+      return {
+        raw: trimmed,
+        proto: 'vmess',
+        ip: data.add || '127.0.0.1',
+        port: String(data.port || 443),
+        sni: data.sni || data.host || data.add,
+        host: data.host || data.add,
+        path: data.path || '/',
+        type: data.net || 'ws',
+        tag: data.ps || 'VMess Server'
       };
-    } catch{clearTimeout(tm);fin(null);}
+    }
+
+    // 2. Standard URI Formats: vless://, trojan://, hysteria2://, hy2://, ss://, tuic://
+    const url = new URL(trimmed);
+    let proto = url.protocol.replace(':', '').toLowerCase();
+    if (proto === 'hy2') proto = 'hysteria2';
+
+    const params = Object.fromEntries(url.searchParams);
+    const ip = url.hostname;
+    const port = url.port || (proto === 'hysteria2' || proto === 'hy2' ? '443' : '443');
+    const sni = params.sni || params.host || params.peer || ip;
+    const host = params.host || ip;
+    const path = params.path || '/';
+    const type = params.type || params.headerType || 'tcp';
+    const tag = decodeURIComponent(url.hash.slice(1)) || `${proto.toUpperCase()} Node`;
+
+    return {
+      raw: trimmed,
+      proto,
+      ip,
+      port,
+      sni,
+      host,
+      path,
+      type,
+      tag
+    };
+  } catch (e) {
+    return null;
+  }
+}
+
+/* ─── Cloudflare CDN Detector ───────────────────────────────── */
+const CF_SUBNETS = [
+  '104.16.','104.17.','104.18.','104.19.','104.20.','104.21.','104.22.',
+  '172.64.','172.65.','172.66.','172.67.','172.68.','172.69.',
+  '188.114.','108.162.','162.158.','198.41.'
+];
+function isCloudflareIP(ip) {
+  return CF_SUBNETS.some(sub => ip.startsWith(sub));
+}
+
+/* ─── Multi-Probe Latency Measurement ───────────────────────── */
+function probeWebSocket(host, port, path, timeout) {
+  return new Promise(resolve => {
+    const start = performance.now();
+    let isDone = false;
+    const done = ms => { if (!isDone) { isDone = true; resolve(ms); } };
+    const timer = setTimeout(() => done(null), timeout);
+
+    try {
+      const ws = new WebSocket(`wss://${host}:${port}${path || '/'}`);
+      ws.onopen = () => {
+        clearTimeout(timer);
+        try { ws.close(); } catch(e){}
+        done(Math.round(performance.now() - start));
+      };
+      ws.onerror = ws.onclose = () => {
+        clearTimeout(timer);
+        const elapsed = Math.round(performance.now() - start);
+        // Fast error (<50% of timeout) indicates active host handshake rejection
+        done(elapsed < timeout * 0.55 ? elapsed : null);
+      };
+    } catch (e) {
+      clearTimeout(timer);
+      done(null);
+    }
   });
 }
 
 function probeHTTPS(host, timeout) {
   return new Promise(resolve => {
-    const ctrl=new AbortController();
-    const tm=setTimeout(()=>{ctrl.abort();resolve(null);},timeout);
-    const t0=performance.now();
-    fetch(`https://${host}/`,{method:'HEAD',mode:'no-cors',cache:'no-store',signal:ctrl.signal})
-      .then(()=>{clearTimeout(tm);resolve(Math.round(performance.now()-t0));})
-      .catch(e=>{
-        clearTimeout(tm);
-        if(e.name==='AbortError'){resolve(null);return;}
-        const el=Math.round(performance.now()-t0);
-        resolve(el<timeout*0.8?el:null);
-      });
-  });
-}
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => { ctrl.abort(); resolve(null); }, timeout);
+    const start = performance.now();
 
-function probeImg(host, timeout) {
-  return new Promise(resolve => {
-    const img=new Image();const t0=performance.now();let done=false;
-    const fin=ms=>{if(!done){done=true;resolve(ms);}};
-    const tm=setTimeout(()=>{img.src='';fin(null);},timeout);
-    img.onload=img.onerror=()=>{
-      clearTimeout(tm);const el=Math.round(performance.now()-t0);
-      fin(el<timeout*0.8?el:null);
-    };
-    img.src=`https://${host}/favicon.ico?_=${Date.now()}`;
-  });
-}
-
-async function testServer(s, timeout) {
-  const host=s.sni||s.ip, fastTO=Math.max(1000, timeout*0.4);
-  const fast=await Promise.race([
-    probeWS(host,s.port,s.path,fastTO),
-    probeHTTPS(host,fastTO),
-    probeImg(host,fastTO),
-  ]);
-  if(fast!==null) return fast;
-  if(aborted) return null;
-  return probeHTTPS(host, timeout);
-}
-
-/* ════════════════════════════════════════════
-   AIMD
-   ════════════════════════════════════════════ */
-function aimdWin(){wins++;if(wins%10===0&&concurrency<30){concurrency++;updateChips();}}
-function aimdLoss(){concurrency=Math.max(4,Math.floor(concurrency/2));wins=0;updateChips();}
-
-/* ════════════════════════════════════════════
-   POOL
-   ════════════════════════════════════════════ */
-function asyncPool(tasks, getConcurrency, onResult) {
-  return new Promise(resolve => {
-    let idx=0, active=0, done=0; const total=tasks.length;
-    function next(){
-      while(!aborted && active<getConcurrency() && idx<total){
-        const i=idx++; active++;
-        tasks[i]().then(res=>{active--;done++;onResult(i,res,done,total);next();if(done>=total||aborted)resolve();});
-      }
-      if(active===0&&(done>=total||idx>=total))resolve();
-    }
-    next();
-  });
-}
-
-/* ════════════════════════════════════════════
-   CACHE
-   ════════════════════════════════════════════ */
-function loadCache(){try{return JSON.parse(localStorage.getItem(CACHE_KEY)||'{}');}catch{return{};}}
-function saveCache(d){try{localStorage.setItem(CACHE_KEY,JSON.stringify(d));}catch{}}
-function clearCache(){localStorage.removeItem(CACHE_KEY);showToast('🗑 کش پاک شد');}
-
-/* ════════════════════════════════════════════
-   PRIORITY + DEDUP
-   ════════════════════════════════════════════ */
-const CF=['104.16.','104.17.','104.18.','104.19.','104.20.','104.21.',
-  '172.64.','172.65.','172.66.','172.67.','172.68.','172.69.',
-  '188.114.','108.162.','162.158.','198.41.'];
-const isCF=ip=>CF.some(p=>ip.startsWith(p));
-
-function dedupeAndPrioritize(parsed, cache) {
-  const seen=new Set();
-  const uniq=parsed.filter(s=>{const k=`${s.ip}:${s.port}:${s.sni}`;return seen.has(k)?false:(seen.add(k),true);});
-  const ipCnt={};
-  const capped=uniq.filter(s=>{ipCnt[s.ip]=(ipCnt[s.ip]||0)+1;return ipCnt[s.ip]<=2;});
-  const now=Date.now();
-  capped.sort((a,b)=>prioScore(b,cache,now)-prioScore(a,cache,now));
-  return capped;
-}
-
-function prioScore(s,cache,now){
-  let p=0;const c=cache[`${s.ip}:${s.port}`];
-  if(c&&now-c.ts<CACHE_TTL){p+=c.alive?200:-200;if(c.lat)p+=Math.max(0,150-c.lat/5);}
-  if(s.port==='443')p+=50; if(isCF(s.ip))p-=100; if(s.type==='tcp')p+=30;
-  return p;
-}
-
-/* ════════════════════════════════════════════
-   MAIN TEST
-   ════════════════════════════════════════════ */
-async function startTest() {
-  aborted=false; servers=[]; wins=0; testedCount=0; selected=new Set();
-  concurrency=parseInt(document.getElementById('concSel').value);
-  const timeout=parseInt(document.getElementById('timeoutSel').value);
-  const sources=getSources();
-  if(!sources.length){showToast('❗ حداقل یک منبع وارد کنید');return;}
-
-  document.getElementById('startBtn').style.display='none';
-  document.getElementById('stopBtn').style.display='';
-  document.getElementById('progSection').style.display='';
-  document.getElementById('algoBar').style.display='';
-  document.getElementById('phaseBar').style.display='';
-  document.getElementById('exportPanel').classList.remove('visible');
-  document.getElementById('serverGrid').innerHTML='';
-  resetStats(); setProgress(0,'در حال دریافت منابع…',0);
-  updateSelectionBar();
-
-  // Show source count chip
-  document.getElementById('cSrcChip').style.display='';
-  document.getElementById('cSrcCount').textContent=sources.length;
-
-  // Fetch all sources in parallel
-  let allLines=[];
-  try {
-    const fetches=sources.map(url=>
-      fetch(url,{cache:'no-store'})
-        .catch(()=>fetch(`https://corsproxy.io/?url=${encodeURIComponent(url)}`,{cache:'no-store'}))
-        .then(r=>r.text())
-        .catch(()=>'')
-    );
-    const texts=await Promise.all(fetches);
-    texts.forEach(t=>{
-      const lines=t.split('\n').map(l=>l.trim()).filter(l=>l.startsWith('trojan://'));
-      allLines.push(...lines);
+    fetch(`https://${host}/`, {
+      method: 'HEAD',
+      mode: 'no-cors',
+      cache: 'no-store',
+      signal: ctrl.signal
+    }).then(() => {
+      clearTimeout(timer);
+      resolve(Math.round(performance.now() - start));
+    }).catch(err => {
+      clearTimeout(timer);
+      if (err.name === 'AbortError') { resolve(null); return; }
+      const elapsed = Math.round(performance.now() - start);
+      resolve(elapsed < timeout * 0.85 ? elapsed : null);
     });
-  } catch(e){showToast('❌ خطا: '+e.message);resetUI();return;}
+  });
+}
 
-  if(!allLines.length){showToast('⚠️ کانفیگ Trojan پیدا نشد');resetUI();return;}
+function probeImage(host, timeout) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const start = performance.now();
+    let isDone = false;
+    const done = ms => { if (!isDone) { isDone = true; resolve(ms); } };
+    const timer = setTimeout(() => { img.src = ''; done(null); }, timeout);
 
-  const parsed=allLines.map(parseTrojan).filter(Boolean);
-  const cache=loadCache();
-  if(Object.keys(cache).length>0) document.getElementById('cCacheChip').style.display='';
+    img.onload = img.onerror = () => {
+      clearTimeout(timer);
+      const elapsed = Math.round(performance.now() - start);
+      done(elapsed < timeout * 0.85 ? elapsed : null);
+    };
+    img.src = `https://${host}/favicon.ico?_=${Date.now()}`;
+  });
+}
 
-  const prioritized=dedupeAndPrioritize(parsed,cache);
-  servers=prioritized.map(s=>({...s,status:'pending',latency:null}));
-  document.getElementById('sTotal').textContent=servers.length;
-  renderCards(); setPhase(1); testStart=performance.now();
+async function testSingleServer(srv, fullTimeout) {
+  const host = srv.sni || srv.ip;
+  const fastTimeout = Math.max(1200, fullTimeout * 0.45);
 
-  const tasks=servers.map((s)=>()=>{
-    if(aborted)return Promise.resolve(null);
-    s.status='testing';
-    return testServer(s,timeout).then(ms=>{
-      if(ms===null)   {s.status='offline';s.latency=null; aimdLoss();}
-      else if(ms<600) {s.status='online'; s.latency=ms;   aimdWin();}
-      else            {s.status='slow';   s.latency=ms;   aimdWin();}
-      cache[`${s.ip}:${s.port}`]={alive:s.status!=='offline',lat:s.latency,ts:Date.now()};
+  // Phase 1: Fast Racing Multi-Probe
+  const fastResult = await Promise.race([
+    probeWebSocket(host, srv.port, srv.path, fastTimeout),
+    probeHTTPS(host, fastTimeout),
+    probeImage(host, fastTimeout)
+  ]);
+
+  if (fastResult !== null) return fastResult;
+  if (isTestingAborted) return null;
+
+  // Phase 2: Full-Timeout Fallback
+  return probeHTTPS(host, fullTimeout);
+}
+
+/* ─── AIMD Concurrency Engine ───────────────────────────────── */
+function recordAIMDSuccess() {
+  consecutiveWins++;
+  if (consecutiveWins % 8 === 0 && concurrencyLimit < 35) {
+    concurrencyLimit++;
+    updateMetricsChips();
+  }
+}
+
+function recordAIMDFailure() {
+  concurrencyLimit = Math.max(4, Math.floor(concurrencyLimit * 0.6));
+  consecutiveWins = 0;
+  updateMetricsChips();
+}
+
+function runAsyncPool(taskArray, getConcurrency, onProgress) {
+  return new Promise(resolve => {
+    let index = 0;
+    let active = 0;
+    let completed = 0;
+    const total = taskArray.length;
+
+    function dispatchNext() {
+      while (!isTestingAborted && active < getConcurrency() && index < total) {
+        const currentIndex = index++;
+        active++;
+        taskArray[currentIndex]().then(res => {
+          active--;
+          completed++;
+          onProgress(currentIndex, res, completed, total);
+          dispatchNext();
+          if (completed >= total || isTestingAborted) resolve();
+        });
+      }
+      if (active === 0 && (completed >= total || index >= total)) resolve();
+    }
+    dispatchNext();
+  });
+}
+
+/* ─── Cache Management ──────────────────────────────────────── */
+function loadCachedMetrics() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_CACHE_KEY) || '{}'); } catch(e) { return {}; }
+}
+function saveCachedMetrics(data) {
+  try { localStorage.setItem(STORAGE_CACHE_KEY, JSON.stringify(data)); } catch(e) {}
+}
+function clearCachedResults() {
+  localStorage.removeItem(STORAGE_CACHE_KEY);
+  showToast('🗑️ حافظه موقت (کش) پاک شد', '🗑️');
+}
+
+/* ─── Main Unified Testing Process ──────────────────────────── */
+async function startUnifiedTest() {
+  isTestingAborted = false;
+  serverList = [];
+  selectedSet.clear();
+  consecutiveWins = 0;
+  totalProcessed = 0;
+
+  concurrencyLimit = parseInt(document.getElementById('concurrencyConfigSelect').value);
+  const timeoutMs = parseInt(document.getElementById('timeoutConfigSelect').value);
+  
+  const enabledSources = INITIAL_SOURCES.filter(s => s.enabled && s.url.trim());
+  if (!enabledSources.length) {
+    showToast('⚠️ لطفاً حداقل یک منبع را فعال کنید', '⚠️');
+    return;
+  }
+
+  // UI Setup
+  document.getElementById('startTestButton').style.display = 'none';
+  document.getElementById('stopTestButton').style.display = 'inline-flex';
+  document.getElementById('progressSection').style.display = 'block';
+  document.getElementById('exportCardSection').classList.remove('visible');
+  document.getElementById('liveStatusText').textContent = 'در حال تست سرورها…';
+  document.getElementById('liveStatusBadge').style.borderColor = 'rgba(56, 189, 248, 0.4)';
+  
+  resetStatsUI();
+  updateProgress(0, 'در حال بارگذاری و رمزگشایی منابع…');
+
+  // 1. Parallel Fetching & Base64 Decoding
+  let rawConfigLines = [];
+  try {
+    const fetchPromises = enabledSources.map(async src => {
+      try {
+        let resp = await fetch(src.url, { cache: 'no-store' }).catch(async () => {
+          return fetch(`https://corsproxy.io/?url=${encodeURIComponent(src.url)}`, { cache: 'no-store' });
+        });
+        let text = await resp.text();
+        
+        // Handle whole Base64 encoded sub
+        if (!text.includes('://')) {
+          const decoded = decodeBase64Safe(text);
+          if (decoded && decoded.includes('://')) text = decoded;
+        }
+
+        return text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      } catch (err) {
+        return [];
+      }
+    });
+
+    const results = await Promise.all(fetchPromises);
+    results.forEach(lines => rawConfigLines.push(...lines));
+  } catch (e) {
+    showToast('❌ خطا در بارگذاری منابع: ' + e.message, '❌');
+    resetTestUI();
+    return;
+  }
+
+  // 2. Parse & Deduplicate
+  const parsed = rawConfigLines.map(parseUniversalProxyURI).filter(Boolean);
+  if (!parsed.length) {
+    showToast('⚠️ هیچ کانفیگ معتبری در منابع پیدا نشد', '⚠️');
+    resetTestUI();
+    return;
+  }
+
+  // Deduplicate by IP:Port:Protocol:SNI
+  const seenKeys = new Set();
+  const uniqueList = parsed.filter(item => {
+    const key = `${item.proto}://${item.ip}:${item.port}?sni=${item.sni}`;
+    if (seenKeys.has(key)) return false;
+    seenKeys.add(key);
+    return true;
+  });
+
+  const cache = loadCachedMetrics();
+  const now = Date.now();
+
+  // Priority Sort (Direct IPs and cached winners first)
+  uniqueList.sort((a, b) => {
+    let scoreA = 0, scoreB = 0;
+    const ca = cache[`${a.ip}:${a.port}`];
+    const cb = cache[`${b.ip}:${b.port}`];
+    if (ca && now - ca.ts < CACHE_LIFETIME && ca.alive) scoreA += 100;
+    if (cb && now - cb.ts < CACHE_LIFETIME && cb.alive) scoreB += 100;
+    if (!isCloudflareIP(a.ip)) scoreA += 40;
+    if (!isCloudflareIP(b.ip)) scoreB += 40;
+    return scoreB - scoreA;
+  });
+
+  serverList = uniqueList.map(s => ({
+    ...s,
+    status: 'pending',
+    latency: null
+  }));
+
+  document.getElementById('statTotalCount').textContent = serverList.length;
+  renderServerCards();
+  testStartTime = performance.now();
+
+  // 3. Construct Testing Tasks
+  const tasks = serverList.map(srv => () => {
+    if (isTestingAborted) return Promise.resolve(null);
+    srv.status = 'testing';
+    return testSingleServer(srv, timeoutMs).then(ms => {
+      if (ms === null) {
+        srv.status = 'offline';
+        srv.latency = null;
+        recordAIMDFailure();
+      } else if (ms < 550) {
+        srv.status = 'online';
+        srv.latency = ms;
+        recordAIMDSuccess();
+      } else {
+        srv.status = 'slow';
+        srv.latency = ms;
+        recordAIMDSuccess();
+      }
+
+      cache[`${srv.ip}:${srv.port}`] = {
+        alive: srv.status !== 'offline',
+        latency: srv.latency,
+        ts: Date.now()
+      };
       return ms;
     });
   });
 
-  let lastRender=0;
-  await asyncPool(tasks,()=>concurrency,(i,result,done,total)=>{
-    testedCount++;
-    const now=Date.now();
-    if(now-lastRender>100||done===total){lastRender=now;renderCards();updateStats();}
-    const elapsed=(performance.now()-testStart)/1000;
-    const rate=testedCount/Math.max(elapsed,0.1);
-    const eta=Math.ceil((total-done)/Math.max(rate,0.1));
-    document.getElementById('cRate').textContent=rate.toFixed(1);
-    document.getElementById('cEta').textContent=done<total?`${eta}s`:'✅';
-    const pct=Math.round((done/total)*100);
-    setProgress(pct,`${done}/${total} | ${servers[i]?.ip}`,pct);
+  // 4. Run Task Pool with Throttled UI Updates
+  let lastRenderTime = 0;
+  await runAsyncPool(tasks, () => concurrencyLimit, (idx, result, completed, total) => {
+    totalProcessed++;
+    const currentTime = Date.now();
+
+    if (currentTime - lastRenderTime > 120 || completed === total) {
+      lastRenderTime = currentTime;
+      renderServerCards();
+      updateDashboardStats();
+    }
+
+    const elapsedSeconds = (performance.now() - testStartTime) / 1000;
+    const reqRate = totalProcessed / Math.max(elapsedSeconds, 0.1);
+    const etaSec = Math.ceil((total - completed) / Math.max(reqRate, 0.1));
+
+    document.getElementById('chipSpeedRate').textContent = reqRate.toFixed(1);
+    document.getElementById('chipEtaTime').textContent = completed < total ? `${etaSec}s` : 'پایان';
+
+    const percent = Math.round((completed / total) * 100);
+    updateProgress(percent, `${completed} از ${total} سرور تست شد • ${serverList[idx]?.ip}`);
   });
 
-  saveCache(cache);
-  setPhase(3); setProgress(100,`✅ تمام! — ${servers.length} سرور از ${sources.length} منبع`,100);
-  renderCards(); updateStats(); buildExport();
-  document.getElementById('exportPanel').classList.add('visible');
-  document.getElementById('cEta').textContent='✅';
-  showToast(`🎉 تست کامل! — ${sources.length} منبع، ${servers.length} سرور بررسی شد`);
-  resetUI();
+  // 5. Complete & Save
+  saveCachedMetrics(cache);
+  updateProgress(100, `✅ تست به پایان رسید — ${serverList.length} سرور ارزیابی شد`);
+  renderServerCards();
+  updateDashboardStats();
+  buildExportText();
+  
+  document.getElementById('exportCardSection').classList.add('visible');
+  document.getElementById('liveStatusText').textContent = 'تست تکمیل شد ✅';
+  document.getElementById('liveStatusBadge').style.borderColor = 'rgba(16, 185, 129, 0.4)';
+  showToast(`🎉 تست با موفقیت پایان یافت (${serverList.filter(s=>s.status==='online').length} سرور سالم)`, '🎉');
+  resetTestUI();
 }
 
-function stopTest(){
-  aborted=true; showToast('⏹ متوقف شد'); resetUI();
-  saveCache(loadCache()); renderCards(); buildExport();
-  if(servers.some(s=>s.status!=='pending'))
-    document.getElementById('exportPanel').classList.add('visible');
-}
-
-function resetUI(){
-  document.getElementById('startBtn').style.display='';
-  document.getElementById('stopBtn').style.display='none';
-}
-function setPhase(n){
-  ['ph1','ph2','ph3'].forEach((id,i)=>{
-    const el=document.getElementById(id);el.className='phase-item';
-    if(i+1<n)el.classList.add('done');else if(i+1===n)el.classList.add('active');
-  });
-}
-
-/* ════════════════════════════════════════════
-   SELECTION SYSTEM
-   ════════════════════════════════════════════ */
-function toggleSelect(idx) {
-  if(selected.has(idx)) selected.delete(idx); else selected.add(idx);
-  // Update card visual
-  const card=document.getElementById('sc-'+idx);
-  if(card){
-    card.classList.toggle('selected', selected.has(idx));
-    const cb=card.querySelector('.server-cb');
-    if(cb) cb.checked=selected.has(idx);
+function stopUnifiedTest() {
+  isTestingAborted = true;
+  showToast('⏹ فرآیند تست متوقف شد', '⏹');
+  resetTestUI();
+  renderServerCards();
+  buildExportText();
+  if (serverList.some(s => s.status !== 'pending')) {
+    document.getElementById('exportCardSection').classList.add('visible');
   }
-  updateSelectionBar();
 }
 
-function selectOnline() {
-  servers.forEach((s,i)=>{if(s.status==='online'||s.status==='slow')selected.add(i);});
-  renderCards(); updateSelectionBar();
+function resetTestUI() {
+  document.getElementById('startTestButton').style.display = 'inline-flex';
+  document.getElementById('stopTestButton').style.display = 'none';
 }
 
-function selectAll() {
-  // Select all currently visible (filtered) servers
-  const q=(document.getElementById('searchBox').value||'').toLowerCase();
-  servers.forEach((s,i)=>{
-    if(activeFilter==='online' &&s.status!=='online') return;
-    if(activeFilter==='slow'   &&s.status!=='slow')   return;
-    if(activeFilter==='offline'&&s.status!=='offline')return;
-    if(q&&!`${s.ip} ${s.sni} ${s.host} ${s.type} ${s.tag}`.toLowerCase().includes(q))return;
-    selected.add(i);
-  });
-  renderCards(); updateSelectionBar();
+function updateProgress(percent, label) {
+  document.getElementById('progressFillBar').style.width = `${percent}%`;
+  document.getElementById('progressStatusLabel').textContent = label;
+  document.getElementById('progressPercentLabel').textContent = `${percent}%`;
 }
 
-function clearSelection() {
-  selected.clear(); renderCards(); updateSelectionBar();
+function updateMetricsChips() {
+  document.getElementById('chipActiveConn').textContent = concurrencyLimit;
 }
 
-function updateSelectionBar() {
-  const bar=document.getElementById('selBar');
-  const cnt=selected.size;
-  if(cnt===0){ bar.classList.remove('visible'); return; }
-  bar.classList.add('visible');
-  document.getElementById('selCount').textContent=`${cnt} سرور انتخاب‌شده`;
-}
+/* ─── Server Cards Rendering ────────────────────────────────── */
+function renderServerCards() {
+  const searchQuery = (document.getElementById('searchFilterInput').value || '').toLowerCase();
+  const sortMode = document.getElementById('sortOrderSelect').value;
 
-function getSelectedServers() {
-  return [...selected].map(i=>servers[i]).filter(Boolean);
-}
-
-function copySelected() {
-  const raw=getSelectedServers().map(s=>s.raw).join('\n');
-  navigator.clipboard.writeText(raw).then(()=>showToast(`✅ ${selected.size} کانفیگ کپی شد!`));
-}
-
-function downloadSelected() {
-  const raw=getSelectedServers().sort((a,b)=>(a.latency??9999)-(b.latency??9999)).map(s=>s.raw).join('\n');
-  const blob=new Blob([raw],{type:'text/plain'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);a.download='selected-trojan.txt';a.click();
-  showToast(`⬇️ ${selected.size} سرور دانلود شد`);
-}
-
-function qrSelected() {
-  const list=getSelectedServers().sort((a,b)=>(a.latency??9999)-(b.latency??9999));
-  if(!list.length){showToast('⚠️ چیزی انتخاب نشده');return;}
-  _qrList=list;_qrIdx=0;updateQRModal();
-  document.getElementById('qrModal').style.display='flex';
-}
-
-function telegramSelected() {
-  const list=getSelectedServers().slice(0,3).sort((a,b)=>(a.latency??9999)-(b.latency??9999));
-  if(!list.length){showToast('⚠️ چیزی انتخاب نشده');return;}
-  const text=encodeURIComponent('🛡 Trojan VPN Servers:\n\n'+list.map((s,i)=>`${i+1}. ${s.ip}:${s.port} (${s.latency||'?'}ms)\n${s.raw}`).join('\n\n'));
-  window.open(`https://t.me/share/url?url=&text=${text}`,'_blank');
-}
-
-function nativeSelected() {
-  const raw=getSelectedServers().map(s=>s.raw).join('\n');
-  if(!raw){showToast('⚠️ چیزی انتخاب نشده');return;}
-  if(navigator.share) navigator.share({title:'Trojan VPN Servers',text:raw}).catch(()=>{});
-  else { navigator.clipboard.writeText(raw).then(()=>showToast('📋 کپی شد!')); }
-}
-
-/* ════════════════════════════════════════════
-   RENDER
-   ════════════════════════════════════════════ */
-function renderCards() {
-  const q   =(document.getElementById('searchBox').value||'').toLowerCase();
-  const sort=document.getElementById('sortSel').value;
-
-  let list=servers.filter(s=>{
-    if(activeFilter==='online' &&s.status!=='online') return false;
-    if(activeFilter==='slow'   &&s.status!=='slow')   return false;
-    if(activeFilter==='offline'&&s.status!=='offline')return false;
-    if(q&&!`${s.ip} ${s.sni} ${s.host} ${s.type} ${s.tag}`.toLowerCase().includes(q))return false;
+  let filtered = serverList.filter(srv => {
+    // Protocol Filter
+    if (currentProtocolFilter !== 'all' && srv.proto !== currentProtocolFilter) return false;
+    // Status Filter
+    if (currentStatusFilter === 'online' && (srv.status !== 'online' && srv.status !== 'slow')) return false;
+    if (currentStatusFilter === 'dead' && srv.status !== 'offline') return false;
+    // Search Query
+    if (searchQuery) {
+      const haystack = `${srv.ip} ${srv.proto} ${srv.sni} ${srv.host} ${srv.tag} ${srv.port}`.toLowerCase();
+      if (!haystack.includes(searchQuery)) return false;
+    }
     return true;
   });
 
-  list=list.slice().sort((a,b)=>{
-    if(sort==='latency')  {if(a.latency===null&&b.latency===null)return 0;if(a.latency===null)return 1;if(b.latency===null)return -1;return a.latency-b.latency;}
-    if(sort==='latency_d'){if(a.latency===null&&b.latency===null)return 0;if(a.latency===null)return 1;if(b.latency===null)return -1;return b.latency-a.latency;}
-    if(sort==='ip')return a.ip.localeCompare(b.ip);
+  // Sorting
+  filtered.sort((a, b) => {
+    if (sortMode === 'latency_asc') {
+      if (a.latency === null && b.latency === null) return 0;
+      if (a.latency === null) return 1;
+      if (b.latency === null) return -1;
+      return a.latency - b.latency;
+    }
+    if (sortMode === 'latency_desc') {
+      if (a.latency === null && b.latency === null) return 0;
+      if (a.latency === null) return 1;
+      if (b.latency === null) return -1;
+      return b.latency - a.latency;
+    }
+    if (sortMode === 'proto') return a.proto.localeCompare(b.proto);
+    if (sortMode === 'ip') return a.ip.localeCompare(b.ip);
     return 0;
   });
 
-  const grid=document.getElementById('serverGrid');
-  if(!servers.length){grid.innerHTML=`<div class="empty-state"><div class="icon">⚡</div><p>شروع کن!</p></div>`;return;}
-  if(!list.length)   {grid.innerHTML=`<div class="empty-state"><div class="icon">🔍</div><p>موردی نیست</p></div>`;return;}
-  grid.innerHTML=list.map((s,r)=>cardHTML(s,r)).join('');
-}
+  const container = document.getElementById('serversListContainer');
 
-function cardHTML(s, rank) {
-  const oi=servers.indexOf(s);
-  const isSel=selected.has(oi);
-  const rcl=rank===0?'rb1':rank===1?'rb2':rank===2?'rb3':'rbn';
-  const scl=(rank===0?' sc-gold':rank===1?' sc-silver':rank===2?' sc-bronze':'')+(isSel?' selected':'');
-  const rl =rank===0?'🥇':rank===1?'🥈':rank===2?'🥉':`#${rank+1}`;
-
-  let lat='';
-  if     (s.status==='testing') lat=`<div class="spin"></div>`;
-  else if(s.status==='pending') lat=`<div style="color:var(--muted);font-size:.65rem">انتظار</div>`;
-  else if(!s.latency)           lat=`<div class="lat-val" style="color:var(--red)">✕</div><div class="lat-unit">آفلاین</div>`;
-  else {
-    const c=s.latency<300?'var(--green)':s.latency<600?'var(--yellow)':'var(--red)';
-    lat=`<div class="lat-val" style="color:${c}">${s.latency}</div><div class="lat-unit">ms</div>`;
+  if (!serverList.length) {
+    container.innerHTML = `
+      <div class="glass-panel" style="text-align: center; padding: 40px 20px;">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">🚀</div>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">برای شروع دکمه «شروع تست» را بزنید.</p>
+      </div>`;
+    return;
   }
 
-  let stTag='';
-  if     (s.status==='online')  stTag=`<span class="tag tg">✅ آنلاین</span>`;
-  else if(s.status==='slow')    stTag=`<span class="tag ty">⚠️ آهسته</span>`;
-  else if(s.status==='offline') stTag=`<span class="tag tr">❌ آفلاین</span>`;
-  else if(s.status==='testing') stTag=`<span class="tag tb">⟳ تست</span>`;
-  else                          stTag=`<span class="tag">⏳</span>`;
+  if (!filtered.length) {
+    container.innerHTML = `
+      <div class="glass-panel" style="text-align: center; padding: 35px 20px;">
+        <div style="font-size: 2rem; margin-bottom: 8px;">🔍</div>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">هیچ سروری مطابق با فیلتر شما یافت نشد.</p>
+      </div>`;
+    return;
+  }
 
-  const cfBadge=isCF(s.ip)?`<span class="tag tp">☁ CDN</span>`:'';
-  const st=(s.tag||'').replace(/ShatakVPN\s*/i,'').trim();
+  container.innerHTML = filtered.map((srv, idx) => createServerCardHTML(srv, idx)).join('');
+}
+
+function createServerCardHTML(srv, rankIndex) {
+  const originalIdx = serverList.indexOf(srv);
+  const isSelected = selectedSet.has(originalIdx);
+
+  // Podium
+  let podiumClass = '';
+  let rankBadgeClass = 'rk-n';
+  let rankLabel = `#${rankIndex + 1}`;
+
+  if (rankIndex === 0 && srv.status === 'online') {
+    podiumClass = 'podium-1'; rankBadgeClass = 'rk-1'; rankLabel = '🥇';
+  } else if (rankIndex === 1 && srv.status === 'online') {
+    podiumClass = 'podium-2'; rankBadgeClass = 'rk-2'; rankLabel = '🥈';
+  } else if (rankIndex === 2 && srv.status === 'online') {
+    podiumClass = 'podium-3'; rankBadgeClass = 'rk-3'; rankLabel = '🥉';
+  }
+
+  // Protocol Badge
+  let protoBadgeClass = 'bg-default';
+  if (srv.proto === 'vless') protoBadgeClass = 'bg-vless';
+  else if (srv.proto === 'trojan') protoBadgeClass = 'bg-trojan';
+  else if (srv.proto === 'hysteria2') protoBadgeClass = 'bg-hy2';
+  else if (srv.proto === 'vmess') protoBadgeClass = 'bg-vmess';
+  else if (srv.proto === 'ss') protoBadgeClass = 'bg-ss';
+
+  // Latency Block
+  let latencyHTML = '';
+  if (srv.status === 'testing') {
+    latencyHTML = `<div class="spinner-ping"></div>`;
+  } else if (srv.status === 'pending') {
+    latencyHTML = `<div style="color:var(--text-dim);font-size:0.7rem;">انتظار</div>`;
+  } else if (!srv.latency) {
+    latencyHTML = `<div class="latency-value" style="color:var(--rose);">✕</div><div class="latency-unit">آفلاین</div>`;
+  } else {
+    const color = srv.latency < 250 ? 'var(--emerald)' : srv.latency < 550 ? 'var(--amber)' : 'var(--rose)';
+    latencyHTML = `<div class="latency-value" style="color:${color};">${srv.latency}</div><div class="latency-unit">ms</div>`;
+  }
+
+  const cleanTag = (srv.tag || '').replace(/ShatakVPN\s*/i, '').trim();
+  const cdnBadge = isCloudflareIP(srv.ip) ? `<span class="tag-badge" style="background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);">☁️ CDN</span>` : '';
 
   return `
-  <div class="server-card${scl}" id="sc-${oi}" onclick="toggleSelect(${oi})">
-    <div class="cb-wrap" onclick="event.stopPropagation()">
-      <input type="checkbox" class="server-cb" ${isSel?'checked':''} onchange="toggleSelect(${oi})"/>
-    </div>
-    <div class="rank-badge ${rcl}">${rl}</div>
-    <div class="server-info">
-      <div class="server-name" title="${escH(s.sni)}">${escH(s.ip)}:${escH(s.port)} — ${escH(s.sni)}</div>
-      <div class="server-meta">
-        ${stTag}
-        <span class="tag tb">🔌 ${escH(s.type.toUpperCase())}</span>
-        ${cfBadge}
-        ${st?`<span class="tag">🏷 ${escH(st)}</span>`:''}
-        ${s.host!==s.ip?`<span class="tag">🖥 ${escH(s.host)}</span>`:''}
+    <div class="server-card ${podiumClass} ${isSelected ? 'selected' : ''}" id="srvCard_${originalIdx}" onclick="toggleServerSelection(${originalIdx})">
+      <div class="card-checkbox-wrap" onclick="event.stopPropagation();">
+        <input type="checkbox" class="card-checkbox" ${isSelected ? 'checked' : ''} onchange="toggleServerSelection(${originalIdx})"/>
+      </div>
+      <div class="rank-indicator ${rankBadgeClass}">${rankLabel}</div>
+      <div class="server-info-col">
+        <div class="server-title-row">
+          <span class="server-title" title="${escapeHtml(srv.sni)}">${escapeHtml(srv.ip)}:${escapeHtml(srv.port)} — ${escapeHtml(srv.sni)}</span>
+        </div>
+        <div class="tags-row">
+          <span class="tag-badge ${protoBadgeClass}">${srv.proto.toUpperCase()}</span>
+          ${cdnBadge}
+          ${cleanTag ? `<span class="tag-badge bg-default">🏷 ${escapeHtml(cleanTag)}</span>` : ''}
+          ${srv.type ? `<span class="tag-badge bg-default">🔌 ${escapeHtml(srv.type)}</span>` : ''}
+        </div>
+      </div>
+      <div class="latency-col">${latencyHTML}</div>
+      <div class="card-actions-col" onclick="event.stopPropagation();">
+        <button class="icon-action-btn" title="کپی کانفیگ" onclick="copySingleConfig(${originalIdx}, this)">📋</button>
+        <button class="icon-action-btn" title="نمایش QR و اشتراک" onclick="openSingleServerModal(${originalIdx})">📱</button>
       </div>
     </div>
-    <div class="lat-block">${lat}</div>
-    <div class="card-acts" onclick="event.stopPropagation()">
-      <button class="icon-btn" title="کپی" onclick="copyC(${oi},this)">📋</button>
-      <button class="icon-btn share-btn" title="اشتراک" onclick="openSS(${oi})">📤</button>
-    </div>
-  </div>`;
+  `;
 }
 
-const escH=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+/* ─── Selection Management ──────────────────────────────────── */
+function toggleServerSelection(idx) {
+  if (selectedSet.has(idx)) selectedSet.delete(idx);
+  else selectedSet.add(idx);
 
-/* ════════════════════════════════════════════
-   STATS
-   ════════════════════════════════════════════ */
-function updateStats(){
-  const on=servers.filter(s=>s.status==='online');
-  const sl=servers.filter(s=>s.status==='slow');
-  const off=servers.filter(s=>s.status==='offline');
-  const ps=servers.filter(s=>s.latency!==null).map(s=>s.latency);
-  document.getElementById('sOnline').textContent=on.length;
-  document.getElementById('sSlow').textContent=sl.length;
-  document.getElementById('sOff').textContent=off.length;
-  document.getElementById('sAvg').textContent=ps.length?Math.round(ps.reduce((a,b)=>a+b)/ps.length)+'ms':'—';
-  document.getElementById('sBest').textContent=ps.length?Math.min(...ps)+'ms':'—';
-}
-function resetStats(){['sOnline','sSlow','sOff'].forEach(id=>document.getElementById(id).textContent='0');document.getElementById('sAvg').textContent='—';document.getElementById('sBest').textContent='—';}
-function setProgress(pct,label,pctNum){document.getElementById('progBar').style.width=pct+'%';document.getElementById('progLabel').textContent=label;document.getElementById('progPct').textContent=pctNum+'%';}
-function updateChips(){document.getElementById('cConc').textContent=concurrency;}
-
-function setF(f){
-  activeFilter=f;
-  ['all','online','slow','offline'].forEach(x=>document.getElementById('fb-'+x).className='badge-f');
-  const cls={all:'fa',online:'fo',slow:'fs',offline:'fd'}[f];
-  document.getElementById('fb-'+f).classList.add(cls);
-  renderCards();
+  const card = document.getElementById(`srvCard_${idx}`);
+  if (card) {
+    card.classList.toggle('selected', selectedSet.has(idx));
+    const cb = card.querySelector('.card-checkbox');
+    if (cb) cb.checked = selectedSet.has(idx);
+  }
+  updateSelectionBarUI();
 }
 
-/* ════════════════════════════════════════════
-   EXPORT / SHARE
-   ════════════════════════════════════════════ */
-function getBest(){
-  return servers.filter(s=>s.status==='online'||s.status==='slow')
-    .sort((a,b)=>(a.latency??9999)-(b.latency??9999));
-}
-function buildExport(){
-  const best=getBest();
-  document.getElementById('exportText').value=best.map(s=>s.raw).join('\n');
-  document.getElementById('exportCount').textContent=`${best.length} سرور`;
+function selectOnlineOnly() {
+  serverList.forEach((s, i) => {
+    if (s.status === 'online' || s.status === 'slow') selectedSet.add(i);
+  });
+  renderServerCards();
+  updateSelectionBarUI();
 }
 
-/* 1. Copy */
-function copyC(idx,btn){
-  navigator.clipboard.writeText(servers[idx]?.raw||'').then(()=>{
-    btn.textContent='✅';btn.classList.add('copied');
-    setTimeout(()=>{btn.textContent='📋';btn.classList.remove('copied');},2000);
-    showToast('✅ کانفیگ کپی شد!');
+function selectAllVisible() {
+  serverList.forEach((s, i) => selectedSet.add(i));
+  renderServerCards();
+  updateSelectionBarUI();
+}
+
+function clearSelection() {
+  selectedSet.clear();
+  renderServerCards();
+  updateSelectionBarUI();
+}
+
+function updateSelectionBarUI() {
+  const bar = document.getElementById('selectionToolbar');
+  const count = selectedSet.size;
+  if (count === 0) {
+    bar.classList.remove('active');
+    return;
+  }
+  bar.classList.add('active');
+  document.getElementById('selectedCountText').textContent = `${count} سرور انتخاب شده`;
+}
+
+function getSelectedServersList() {
+  return [...selectedSet].map(i => serverList[i]).filter(Boolean);
+}
+
+function copySelectedConfigs() {
+  const rawText = getSelectedServersList().map(s => s.raw).join('\n');
+  navigator.clipboard.writeText(rawText).then(() => {
+    showToast(`✅ ${selectedSet.size} کانفیگ انتخاب‌شده کپی شد`, '📋');
   });
 }
-function copyExport(){navigator.clipboard.writeText(document.getElementById('exportText').value).then(()=>showToast('✅ همه کپی شدند!'));}
 
-/* 2. Download */
-function dlExport(){
-  const blob=new Blob([document.getElementById('exportText').value],{type:'text/plain'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='best-trojan-servers.txt';a.click();showToast('⬇️ دانلود شد');
-}
-
-/* 3. QR */
-function qrURL(text,size=260){return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&ecc=M&data=${encodeURIComponent(text)}`;}
-
-function showBulkQR(){
-  const best=getBest().slice(0,10);
-  if(!best.length){showToast('⚠️ سرور آنلاینی نیست');return;}
-  _qrList=best;_qrIdx=0;updateQRModal();
-  document.getElementById('qrModal').style.display='flex';
-}
-function updateQRModal(){
-  const s=_qrList[_qrIdx];
-  document.getElementById('qrTitle').textContent=`📱 QR — ${_qrIdx+1} از ${_qrList.length}`;
-  document.getElementById('qrImg').src=qrURL(s.raw,280);
-  document.getElementById('qrConfigText').textContent=s.raw;
-  document.getElementById('qrImg').dataset.config=s.raw;
-  document.getElementById('qrNav').innerHTML=`
-    <button class="btn btn-outline btn-sm" onclick="qrPrev()" ${_qrIdx===0?'disabled':''}>◀ قبلی</button>
-    <span style="font-size:.74rem;color:var(--muted)">${s.ip}:${s.port} | ${s.latency?s.latency+'ms':'—'}</span>
-    <button class="btn btn-outline btn-sm" onclick="qrNext()" ${_qrIdx===_qrList.length-1?'disabled':''}>بعدی ▶</button>`;
-}
-function qrPrev(){if(_qrIdx>0){_qrIdx--;updateQRModal();}}
-function qrNext(){if(_qrIdx<_qrList.length-1){_qrIdx++;updateQRModal();}}
-function downloadQR(){
-  const a=document.createElement('a');
-  a.href=qrURL(_qrList[_qrIdx].raw,400);
-  a.download=`trojan-qr-${_qrList[_qrIdx].ip}.png`;a.target='_blank';a.click();
-  showToast('⬇️ QR دانلود شد');
-}
-function copyQRConfig(){navigator.clipboard.writeText(_qrList[_qrIdx].raw).then(()=>showToast('✅ کانفیگ کپی شد!'));}
-
-/* 4. Subscription */
-function showSubLink(){
-  const best=getBest();if(!best.length){showToast('⚠️ سرور آنلاینی نیست');return;}
-  const raw=best.map(s=>s.raw).join('\n');
-  const b64=btoa(unescape(encodeURIComponent(raw)));
-  document.getElementById('subBase64Text').textContent=b64.slice(0,130)+'…';
-  document.getElementById('subBase64Text').dataset.full=b64;
-  document.getElementById('subQrImg').src=qrURL(b64.slice(0,300),180);
-  document.getElementById('subModal').style.display='flex';
-}
-function copySubB64(){
-  const b64=document.getElementById('subBase64Text').dataset.full||document.getElementById('subBase64Text').textContent;
-  navigator.clipboard.writeText(b64).then(()=>showToast('✅ لینک Subscription کپی شد!'));
+function downloadSelectedConfigs() {
+  const list = getSelectedServersList().sort((a, b) => (a.latency ?? 9999) - (b.latency ?? 9999));
+  const blob = new Blob([list.map(s => s.raw).join('\n')], { type: 'text/plain;charset=utf-8' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `selected-v2ray-configs.txt`;
+  link.click();
+  showToast(`⬇️ ${selectedSet.size} سرور دانلود شد`, '⬇️');
 }
 
-/* 5. URL Share */
-function shareViaURL(){
-  const best=getBest().slice(0,5);if(!best.length){showToast('⚠️ سرور آنلاینی نیست');return;}
-  const b64=btoa(unescape(encodeURIComponent(best.map(s=>s.raw).join('\n'))));
-  const shareUrl=`${location.href.split('#')[0]}#configs=${b64}`;
-  document.getElementById('shareUrlText').textContent=shareUrl;
-  document.getElementById('urlQrImg').src=qrURL(shareUrl,180);
-  document.getElementById('urlModal').style.display='flex';
-}
-function copyShareUrl(){navigator.clipboard.writeText(document.getElementById('shareUrlText').textContent).then(()=>showToast('✅ لینک کپی شد!'));}
-function openShareUrl(){window.open(document.getElementById('shareUrlText').textContent,'_blank');}
-
-/* 6. Native Share */
-async function shareNative(){
-  const best=getBest().slice(0,10);if(!best.length){showToast('⚠️ سرور آنلاینی نیست');return;}
-  if(navigator.share){try{await navigator.share({title:'Trojan VPN Servers',text:best.map(s=>s.raw).join('\n')});showToast('✅ اشتراک‌گذاری موفق!');}
-  catch(e){if(e.name!=='AbortError')copyExport();}}
-  else{copyExport();showToast('📋 کپی شد!');}
+function openSelectedQRModal() {
+  const list = getSelectedServersList().sort((a, b) => (a.latency ?? 9999) - (b.latency ?? 9999));
+  if (!list.length) return;
+  qrCarouselItems = list;
+  qrCarouselCurrentIndex = 0;
+  updateQRCarouselView();
+  openModal('qrModalBackdrop');
 }
 
-/* 7. Telegram */
-function shareViaTelegram(){
-  const best=getBest().slice(0,3);if(!best.length){showToast('⚠️ سرور آنلاینی نیست');return;}
-  const text=encodeURIComponent('🛡 Trojan VPN Servers:\n\n'+best.map((s,i)=>`${i+1}. ${s.ip}:${s.port} (${s.latency||'?'}ms)\n${s.raw}`).join('\n\n'));
-  window.open(`https://t.me/share/url?url=&text=${text}`,'_blank');
+function shareSelectedTelegram() {
+  const list = getSelectedServersList().slice(0, 3);
+  if (!list.length) return;
+  const text = encodeURIComponent('⚡ سرورهای منتخب V2Ray:\n\n' + list.map((s, i) => `${i+1}. [${s.proto.toUpperCase()}] ${s.ip}:${s.port} (${s.latency || '?'}ms)\n${s.raw}`).join('\n\n'));
+  window.open(`https://t.me/share/url?url=&text=${text}`, '_blank');
 }
 
-/* Single server share */
-function openSS(idx){
-  const s=servers[idx];if(!s||s.status==='pending'||s.status==='testing')return;
-  _ssIdx=idx;
-  document.getElementById('ssName').textContent=`${s.ip}:${s.port} — ${s.sni}`;
-  document.getElementById('ssMeta').textContent=`${s.status==='online'?'✅ آنلاین':s.status==='slow'?'⚠️ آهسته':'❌ آفلاین'} | پینگ: ${s.latency?s.latency+'ms':'N/A'} | ${s.type.toUpperCase()}`;
-  document.getElementById('ssQr').src=qrURL(s.raw,210);
-  document.getElementById('ssGrid').innerHTML=`
-    <div class="share-tile" onclick="ssAct('copy')"><span class="ico">📋</span>کپی کانفیگ</div>
-    <div class="share-tile" onclick="ssAct('qr')"><span class="ico">📱</span>QR بزرگ</div>
-    <div class="share-tile" onclick="ssAct('telegram')"><span class="ico">✈️</span>تلگرام</div>
-    <div class="share-tile" onclick="ssAct('native')"><span class="ico">📤</span>اشتراک</div>
-    <div class="share-tile" onclick="ssAct('detail')"><span class="ico">ℹ️</span>جزئیات</div>`;
-  document.getElementById('ssModal').style.display='flex';
-}
-function ssAct(action){
-  const s=servers[_ssIdx];if(!s)return;
-  closeModal('ssModal');
-  if(action==='copy')    navigator.clipboard.writeText(s.raw).then(()=>showToast('✅ کانفیگ کپی شد!'));
-  else if(action==='qr') {_qrList=[s];_qrIdx=0;updateQRModal();document.getElementById('qrModal').style.display='flex';}
-  else if(action==='telegram'){window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(`🛡 Trojan: ${s.ip}:${s.port} (${s.latency||'?'}ms)\n${s.raw}`)}`,'_blank');}
-  else if(action==='native'){if(navigator.share)navigator.share({title:'Trojan Server',text:s.raw}).catch(()=>{});else navigator.clipboard.writeText(s.raw).then(()=>showToast('📋 کپی شد!'));}
-  else if(action==='detail')alert([`IP: ${s.ip}`,`Port: ${s.port}`,`SNI: ${s.sni}`,`Host: ${s.host}`,`Path: ${s.path}`,`Type: ${s.type}`,`Latency: ${s.latency?s.latency+'ms':'N/A'}`,`CF CDN: ${isCF(s.ip)?'بله':'خیر'}`,`Tag: ${s.tag||'—'}`,'','── Raw Config ──',s.raw].join('\n'));
+/* ─── Export & Bulk Sharing ─────────────────────────────────── */
+function getActiveBestServers() {
+  return serverList
+    .filter(s => s.status === 'online' || s.status === 'slow')
+    .sort((a, b) => (a.latency ?? 9999) - (b.latency ?? 9999));
 }
 
-/* ════════════════════════════════════════════
-   ACCESS PANEL
-   ════════════════════════════════════════════ */
-function toggleAccess(){
-  const body=document.getElementById('accessBody');
-  const arrow=document.getElementById('accessArrow');
-  const open=body.classList.toggle('open');
-  arrow.textContent=open?'▲':'▼';
+function buildExportText() {
+  const best = getActiveBestServers();
+  document.getElementById('exportTextarea').value = best.map(s => s.raw).join('\n');
+  document.getElementById('exportCountBadge').textContent = `${best.length} سرور آماده`;
 }
 
-/* ════════════════════════════════════════════
-   MODALS
-   ════════════════════════════════════════════ */
-function closeModal(id){document.getElementById(id).style.display='none';}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')['qrModal','subModal','urlModal','ssModal'].forEach(closeModal);});
+function copyAllExportConfigs() {
+  const text = document.getElementById('exportTextarea').value;
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('✅ همه کانفیگ‌ها در کلیپ‌بورد کپی شدند', '📋');
+  });
+}
 
-/* ════════════════════════════════════════════
-   URL HASH (receive shared configs)
-   ════════════════════════════════════════════ */
-function checkURLHash(){
-  if(!location.hash.startsWith('#configs='))return;
-  try{
-    const raw=decodeURIComponent(escape(atob(location.hash.slice('#configs='.length))));
-    const lines=raw.split('\n').filter(l=>l.startsWith('trojan://'));
-    if(lines.length){
-      const parsed=lines.map(parseTrojan).filter(Boolean);
-      servers=parsed.map(s=>({...s,status:'pending',latency:null}));
-      document.getElementById('sTotal').textContent=servers.length;
-      document.getElementById('exportText').value=lines.join('\n');
-      document.getElementById('exportCount').textContent=`${lines.length} سرور دریافتی`;
-      document.getElementById('exportPanel').classList.add('visible');
-      renderCards();
-      showToast(`📥 ${lines.length} سرور از لینک مشترک لود شد!`);
-      setTimeout(()=>showToast('💡 برای تست، شروع تست را بزن!'),2800);
+function downloadExportFile() {
+  const text = document.getElementById('exportTextarea').value;
+  if (!text) return;
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `fast-v2ray-servers-${new Date().toISOString().slice(0,10)}.txt`;
+  a.click();
+  showToast('⬇️ فایل سابسکریپشن دانلود شد', '⬇️');
+}
+
+function copySingleConfig(idx, btn) {
+  const srv = serverList[idx];
+  if (!srv) return;
+  navigator.clipboard.writeText(srv.raw).then(() => {
+    btn.classList.add('copied');
+    showToast('✅ کانفیگ کپی شد', '📋');
+    setTimeout(() => btn.classList.remove('copied'), 2000);
+  });
+}
+
+/* QR Code Modal Helpers */
+function generateQRURL(text, size = 260) {
+  return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&ecc=M&data=${encodeURIComponent(text)}`;
+}
+
+function openBulkQRModal() {
+  const best = getActiveBestServers().slice(0, 15);
+  if (!best.length) {
+    showToast('⚠️ سرور فعالی برای نمایش QR وجود ندارد', '⚠️');
+    return;
+  }
+  qrCarouselItems = best;
+  qrCarouselCurrentIndex = 0;
+  updateQRCarouselView();
+  openModal('qrModalBackdrop');
+}
+
+function openSingleServerModal(idx) {
+  const srv = serverList[idx];
+  if (!srv) return;
+  qrCarouselItems = [srv];
+  qrCarouselCurrentIndex = 0;
+  updateQRCarouselView();
+  openModal('qrModalBackdrop');
+}
+
+function updateQRCarouselView() {
+  const srv = qrCarouselItems[qrCarouselCurrentIndex];
+  if (!srv) return;
+
+  document.getElementById('qrModalTitle').textContent = `📱 QR Code — سرور ${qrCarouselCurrentIndex + 1} از ${qrCarouselItems.length}`;
+  document.getElementById('qrModalImage').src = generateQRURL(srv.raw, 280);
+  document.getElementById('qrModalRawText').textContent = srv.raw;
+
+  const nav = document.getElementById('qrCarouselNav');
+  if (qrCarouselItems.length > 1) {
+    nav.innerHTML = `
+      <button class="btn btn-ghost btn-sm" onclick="navQR(-1)" ${qrCarouselCurrentIndex === 0 ? 'disabled' : ''}>◀ قبلی</button>
+      <span style="font-size:0.75rem;color:var(--text-muted);font-weight:700;">[${srv.proto.toUpperCase()}] ${srv.ip} (${srv.latency || '?'}ms)</span>
+      <button class="btn btn-ghost btn-sm" onclick="navQR(1)" ${qrCarouselCurrentIndex === qrCarouselItems.length - 1 ? 'disabled' : ''}>بعدی ▶</button>
+    `;
+  } else {
+    nav.innerHTML = `<span style="font-size:0.75rem;color:var(--text-muted);font-weight:700;">[${srv.proto.toUpperCase()}] ${srv.ip}</span>`;
+  }
+}
+
+function navQR(step) {
+  qrCarouselCurrentIndex = Math.max(0, Math.min(qrCarouselItems.length - 1, qrCarouselCurrentIndex + step));
+  updateQRCarouselView();
+}
+
+function downloadActiveQRImage() {
+  const srv = qrCarouselItems[qrCarouselCurrentIndex];
+  if (!srv) return;
+  const a = document.createElement('a');
+  a.href = generateQRURL(srv.raw, 450);
+  a.download = `qr-${srv.proto}-${srv.ip}.png`;
+  a.target = '_blank';
+  a.click();
+}
+
+function copyActiveQRConfig() {
+  const srv = qrCarouselItems[qrCarouselCurrentIndex];
+  if (!srv) return;
+  navigator.clipboard.writeText(srv.raw).then(() => showToast('✅ کانفیگ کپی شد', '📋'));
+}
+
+/* Subscription Link (Base64) */
+function openSubscriptionLinkModal() {
+  const best = getActiveBestServers();
+  if (!best.length) return;
+  const rawAll = best.map(s => s.raw).join('\n');
+  const b64 = btoa(unescape(encodeURIComponent(rawAll)));
+
+  document.getElementById('subBase64PreviewText').textContent = b64;
+  openModal('subModalBackdrop');
+}
+
+function copySubscriptionBase64() {
+  const b64 = document.getElementById('subBase64PreviewText').textContent;
+  navigator.clipboard.writeText(b64).then(() => showToast('✅ کد سابسکریپشن کپی شد', '🔗'));
+}
+
+/* Web Share URL Hash */
+function openShareURLModal() {
+  const best = getActiveBestServers().slice(0, 6);
+  if (!best.length) return;
+  const b64 = btoa(unescape(encodeURIComponent(best.map(s => s.raw).join('\n'))));
+  const shareURL = `${location.origin}${location.pathname}#configs=${b64}`;
+
+  document.getElementById('webShareLinkText').textContent = shareURL;
+  openModal('urlModalBackdrop');
+}
+
+function copyWebShareURL() {
+  const url = document.getElementById('webShareLinkText').textContent;
+  navigator.clipboard.writeText(url).then(() => showToast('✅ لینک وب کپی شد', '🌐'));
+}
+
+function openWebShareURL() {
+  window.open(document.getElementById('webShareLinkText').textContent, '_blank');
+}
+
+function triggerNativeShare() {
+  const best = getActiveBestServers().slice(0, 8);
+  if (!best.length) return;
+  const text = best.map(s => s.raw).join('\n');
+  if (navigator.share) {
+    navigator.share({ title: 'V2Ray Fast Proxies', text }).catch(() => {});
+  } else {
+    copyAllExportConfigs();
+  }
+}
+
+function shareToTelegram() {
+  const best = getActiveBestServers().slice(0, 4);
+  if (!best.length) return;
+  const text = encodeURIComponent('⚡ بهترین سرورهای پرسرعت V2Ray/Trojan:\n\n' + best.map((s, i) => `${i+1}. [${s.proto.toUpperCase()}] ${s.ip}:${s.port} (${s.latency}ms)\n${s.raw}`).join('\n\n'));
+  window.open(`https://t.me/share/url?url=&text=${text}`, '_blank');
+}
+
+/* ─── Filters & Pills ───────────────────────────────────────── */
+function setProtocolFilter(proto, pillEl) {
+  currentProtocolFilter = proto;
+  document.querySelectorAll('.protocol-pills .proto-pill').forEach(p => p.classList.remove('active'));
+  pillEl.classList.add('active');
+  renderServerCards();
+}
+
+function setStatusFilter(status, pillEl) {
+  currentStatusFilter = currentStatusFilter === status ? 'all' : status;
+  pillEl.classList.toggle('active', currentStatusFilter === status);
+  renderServerCards();
+}
+
+/* ─── Stats Helper ──────────────────────────────────────────── */
+function updateDashboardStats() {
+  const online = serverList.filter(s => s.status === 'online');
+  const slow = serverList.filter(s => s.status === 'slow');
+  const dead = serverList.filter(s => s.status === 'offline');
+  const pings = serverList.filter(s => s.latency !== null).map(s => s.latency);
+
+  document.getElementById('statOnlineCount').textContent = online.length;
+  document.getElementById('statSlowCount').textContent = slow.length;
+  document.getElementById('statDeadCount').textContent = dead.length;
+  document.getElementById('statAvgPing').textContent = pings.length ? `${Math.round(pings.reduce((a,b)=>a+b)/pings.length)}ms` : '—';
+  document.getElementById('statBestPing').textContent = pings.length ? `${Math.min(...pings)}ms` : '—';
+}
+
+function resetStatsUI() {
+  ['statOnlineCount', 'statSlowCount', 'statDeadCount'].forEach(id => document.getElementById(id).textContent = '0');
+  document.getElementById('statAvgPing').textContent = '—';
+  document.getElementById('statBestPing').textContent = '—';
+}
+
+/* ─── Modal Helpers ─────────────────────────────────────────── */
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.remove('open'));
+});
+
+/* ─── Toast System ──────────────────────────────────────────── */
+let toastTimeout;
+function showToast(text, icon = '✅') {
+  const toast = document.getElementById('toastMessage');
+  document.getElementById('toastIcon').textContent = icon;
+  document.getElementById('toastText').textContent = text;
+  toast.classList.add('show');
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => toast.classList.remove('show'), 3200);
+}
+
+function escapeHtml(str) {
+  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+/* ─── URL Hash Listener ─────────────────────────────────────── */
+function checkIncomingSharedConfigs() {
+  if (!location.hash.startsWith('#configs=')) return;
+  try {
+    const b64 = location.hash.slice('#configs='.length);
+    const decoded = decodeBase64Safe(b64);
+    if (!decoded) return;
+    const lines = decoded.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    const parsed = lines.map(parseUniversalProxyURI).filter(Boolean);
+    if (parsed.length) {
+      serverList = parsed.map(s => ({ ...s, status: 'pending', latency: null }));
+      document.getElementById('statTotalCount').textContent = serverList.length;
+      document.getElementById('exportCardSection').classList.add('visible');
+      document.getElementById('exportTextarea').value = lines.join('\n');
+      document.getElementById('exportCountBadge').textContent = `${lines.length} سرور اشتراکی`;
+      renderServerCards();
+      showToast(`📥 ${lines.length} سرور از لینک وب بارگذاری شد`, '📥');
     }
-  }catch{}
+  } catch (e) {}
 }
 
-/* ════════════════════════════════════════════
-   TOAST
-   ════════════════════════════════════════════ */
-let _tt;
-function showToast(msg){
-  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
-  clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3200);
-}
-
-/* ════════════════════════════════════════════
-   INIT
-   ════════════════════════════════════════════ */
-// Add default sources
-DEFAULT_SOURCES.forEach(url=>addSource(url));
-setF('all');
-checkURLHash();
+/* ─── Initialization ────────────────────────────────────────── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderSourcesUI();
+  checkIncomingSharedConfigs();
+});
 </script>
 </body>
 </html>
