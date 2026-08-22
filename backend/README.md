@@ -13,7 +13,24 @@ This optional backend runs actual proxy traffic through `sing-box`. GitHub Pages
 - The test destination is fixed by the server; clients cannot turn the endpoint into a generic port scanner.
 - Temporary sing-box configs are mode 0600 and deleted after each test. Raw URIs are not logged.
 
-## Docker
+## Railway
+The repository root contains `railway.toml`, which builds `backend/Dockerfile` and uses `/health` as the deployment health check.
+
+Required production setup in Railway Variables:
+```text
+TT_API_TOKEN=<long-random-secret>
+TT_ALLOWED_ORIGINS=https://aliramezan5.github.io
+TT_RATE_LIMIT=12
+TT_MAX_BATCH=20
+TT_VERIFY_CONCURRENCY=4
+TT_TRUST_PROXY=false
+```
+
+Railway injects `PORT` automatically and the backend already listens on `0.0.0.0`. Generate a public domain under **Settings → Networking** and use that HTTPS URL in the frontend's **Backend URL** field.
+
+For proxy verification, use a Railway **Full Trial** or paid plan with normal outbound networking. A Limited Trial can restrict outbound traffic and make valid proxy configurations appear to fail.
+
+## Local Docker
 ```bash
 docker compose -f backend/docker-compose.yml up -d --build
 ```
